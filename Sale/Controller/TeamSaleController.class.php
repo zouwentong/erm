@@ -93,4 +93,10 @@ class TeamSaleController extends CommonController {
 
     	}
     }
+
+    public function testgii3(){
+    	if(IS_AJAX){
+
+    	}
+    }
 }
