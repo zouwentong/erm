@@ -87,7 +87,9 @@ class TeamSaleController extends CommonController {
     	}
     }
 
+    public function testgii2(){
 
+    }
 
 
 }
