@@ -93,8 +93,12 @@ class TeamSaleController extends CommonController {
 
     	}
     }
+<<<<<<< .merge_file_a14140
 
     public function testgii3(){
+=======
+	public function testgii2(){
+>>>>>>> .merge_file_a00580
     	if(IS_AJAX){
 
     	}
