@@ -1,0 +1,19 @@
+<div class="form-group">
+    <label class="col-sm-2 control-label">区域</label>
+    <div class="col-sm-9">
+        <input type="text" class="form-control validate[required]" name="areaName" placeholder="区域" autocomplete="off">
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-2 control-label">负责人</label>
+    <div class="col-sm-9">
+        <input type="text" class="form-control validate[required,ajax[ajaxEmpCallPhp]]" name="areaLeader" placeholder="区域负责人" autocomplete="off">
+    </div>
+</div>
+<script type="text/javascript">
+    $('input').iCheck({
+        checkboxClass: 'icheckbox_minimal',
+        radioClass: 'iradio_minimal',
+        increaseArea: '20%' // optional
+    });
+</script>

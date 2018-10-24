@@ -1,0 +1,189 @@
+<extend name="./App/Common/View/default/base.html"/>
+
+<block name="css">
+ <link href="RES{:C('DEFAULT_THEME')}/resources/jQuery-Validation-Engine/css/validationEngine.jquery.css" rel="stylesheet">
+</block>
+
+<block name="breadcrumb">
+<div class="row _breadcrumb">
+    <div class="col-xs-12">
+        <ol class="breadcrumb">
+            产品管理
+        </ol>
+
+        <ul class="breadcrumb">
+            <li><i class="fa fa-home"></i>首页</li>
+            <li><a>销售管理</a></li>
+            <li class="active"><a>产品管理</a></li>
+        </ul>
+    </div>
+</div>
+</block>
+
+<block name="content">
+<!--分类管理-->
+<div class="row">
+	<div class="col-xs-12">
+		<div class="_proclass">
+			<h3>所有产品 <?php if ($auth->check('Sale/Product/add', session('empId')) || session('empId') == C('CFG_MANAGER_ID')):?><a class="add-btn">添加产品</a><?php endif; ?></h3>
+			<?php
+				$edit=$auth->check('Sale/Product/edit', session('empId'));
+				$delete=$auth->check('Sale/Product/edit', session('empId'));	
+			?>
+			<notempty name="products" id="v">
+			<ul>
+				<volist name="products" id="v">
+				<li>
+					<div class="_proclass-li">
+						<div class="_proclass-name">
+							<eq name="v.isFolder" value="1">
+								<span class="folder" val="{$v.id}"><a><i class="fa fa-plus"></i></a></span>
+							<else/>
+								<span class="folder" val="{$v.id}"><a><i class="fa fa-minus"></i></a></span>
+							</eq> 
+							<strong>{$v.productName}</strong>
+						</div>
+						<div class="_proclass-desc">{$v.desc}</div>
+						<div class="_op">
+							<?php if ($edit || session('empId') == C('CFG_MANAGER_ID')):?>
+							<span class="_op-edit"><a href="javascript:;" val="{$v.id}" class="edit-btn"><i class="fa fa-edit"></i></a></span>
+							<?php endif; ?>
+							<?php if ($delete || session('empId') == C('CFG_MANAGER_ID')):?>
+							<span class="_op-delete"><a href="javascript:;" val="{$v.id}" class="remove-btn"><i class="fa fa-close"></i></a></span>
+							<?php endif; ?>
+						</div>
+					</div>
+					<notempty name="v.child">
+					<ul class="second-level" <eq name="v.isFolder" value="1">style="display:none;"</eq> >
+						<volist name="v.child" id="child">
+						<li>
+							<div class="_proclass-li">
+								<div class="_proclass-name">
+									<strong>{$child.productName}</strong>
+								</div>
+								<div class="_proclass-desc">{$child.productDesc}</div>
+								<div class="_op">
+									<?php if ($edit || session('empId') == C('CFG_MANAGER_ID')):?>
+									<span class="_op-edit"><a href="javascript:;" val="{$child.id}" class="edit-btn"><i class="fa fa-edit"></i></a></span>
+									<?php endif; ?>
+									<?php if ($delete || session('empId') == C('CFG_MANAGER_ID')):?>
+									<span class="_op-delete"><a href="javascript:;" val="{$child.id}" class="remove-btn"><i class="fa fa-close"></i></a></span>
+									<?php endif; ?>
+								</div>
+							</div>
+							<notempty name="child.child">
+							<ul>
+								<volist name="child.child" id="son">
+								<li>
+									<div class="_proclass-li">
+										<div class="_proclass-name">
+											<strong>{$son.productName}</strong>
+										</div>
+										<div class="_proclass-desc">{$son.productDesc}</div>
+										<div class="_op">
+											<?php if ($edit || session('empId') == C('CFG_MANAGER_ID')):?>
+											<span class="_op-edit"><a href="javascript:;" val="{$son.id}" class="edit-btn"><i class="fa fa-edit"></i></a></span>
+											<?php endif; ?>
+											<?php if ($delete || session('empId') == C('CFG_MANAGER_ID')):?>
+											<span class="_op-delete"><a href="javascript:;" val="{$son.id}" class="remove-btn"><i class="fa fa-close"></i></a></span>
+											<?php endif; ?>
+										</div>
+									</div>
+								</li>
+								</volist>
+							</ul>
+							</notempty>
+						</li>
+						</volist>
+					</ul>
+					</notempty>
+				</li>
+				</volist>
+			</ul>
+			<else/>
+			<ul>
+				<li>
+				暂时没有产品
+				</li>
+			</ul>
+			</notempty>
+		</div>
+	</div>
+</div>
+</block>
+
+<block name="scripts">
+
+
+<script type="text/javascript">
+	var addUrl='{:U("add")}';
+	var editUrl='{:U("edit")}';
+	var delUrl='{:U("delete")}';
+	var type=1;
+</script>
+<script src="RES{:C('DEFAULT_THEME')}/resources/jQuery-Validation-Engine/js/jquery.validationEngine-zh_CN.js"></script>
+<script src="RES{:C('DEFAULT_THEME')}/resources/jQuery-Validation-Engine/js/jquery.validationEngine.min.js"></script>
+<script src="RES{:C('DEFAULT_THEME')}/js/form.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#myForm").submit(function(){
+		if( jQuery('#myForm').validationEngine('validate')){
+			if(type==1){
+				ajaxForm.store($('#myForm').attr("action"),$('#myForm').serialize(),function(res){
+					// 自定义更新表格数据
+					window.location.href=window.location.href;
+				});
+			}else{
+				ajaxForm.update($('#myForm').attr("action"),$('#myForm').serialize(),function(res){
+					window.location.href=window.location.href;
+				});
+			}
+		}
+		return false;
+	});
+
+	$("table,ul").on("click",'.remove-btn',function(){
+		var item=$(this);
+		ajaxForm.delete(delUrl,$(this),function(){
+			item.parents("li").remove();
+		});
+	});
+});
+</script>
+
+<script type="text/javascript">
+
+	$('.folder').click(function(){
+		var id=$(this).attr('val');
+		if($(this).find('i').hasClass('fa-plus')){
+			$(this).parents('._proclass-li').next('ul').show();
+			$(this).find('i').removeClass('fa-plus').addClass('fa-minus');
+			$.ajax({
+				type:"post",
+				url:"{:U('setFolder')}",
+				data:{
+					id:id,
+					isFolder:0
+				},
+				success:function(res){
+
+				}
+			});
+		}else{
+			$(this).parents('._proclass-li').next('ul').hide();
+			$(this).find('i').removeClass('fa-minus').addClass('fa-plus');
+			$.ajax({
+				type:"post",
+				url:"{:U('setFolder')}",
+				data:{
+					id:id,
+					isFolder:1
+				},
+				success:function(res){
+					
+				}
+			});
+		}
+	});
+</script>
+</block>

@@ -1,0 +1,215 @@
+<extend name="./App/Common/View/default/base.html"/>
+
+<block name="title">
+上传聊天资源-销售管理-
+</block>
+
+<block name="menu">
+    {:W('Common/Cat/menu',array('Sale/ChatSource/index'))}
+</block>
+
+<block name="css">
+ <link href="RES{:C('DEFAULT_THEME')}/resources/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet">
+ <link href="RES{:C('DEFAULT_THEME')}/resources/jQuery-Validation-Engine/css/validationEngine.jquery.css" rel="stylesheet">
+ <link rel="stylesheet" type="text/css" href="RES{:C('DEFAULT_THEME')}/resources/uploadify/uploadify.css">
+</block>
+
+<block name="breadcrumb">
+<div class="row _breadcrumb">
+    <div class="col-xs-12">
+        <ol class="breadcrumb">
+            上传聊天资源 <a href="{:U('index')}" class="btn btn-xs btn-primary">聊天记录</a> 
+            <!-- <li class="_msg">分配的结构完全决定于生产的结构，分配本身就是生产的产物，不仅就对象说是如此《马克思》</li> -->
+        </ol>
+
+        <ul class="breadcrumb">
+            <li><i class="fa fa-home"></i>首页</li>
+            <li><a>销售管理</a></li>
+            <li class="active"><a>上传聊天资源</a></li>
+        </ul>
+    </div>
+</div>
+</block>
+
+<block name="content">
+<div class="panel">
+	<div class="panel-body">
+		<!--创建投票  开始-->
+		<div class="row">
+			<div class="col-xs-12 col-lg-6">
+				<form class="form-horizontal hori-borderd" id="myForm">
+					<div class="form-group">
+						<label class="col-sm-3 control-label">聊天日期</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control pickdate validate[required]" onClick="WdatePicker({maxDate:'%y-%M-%d'})" <notempty name="collectDate">value="{$collectDate}"</notempty> name="chatDate" placeholder="聊天日期" autocomplete="off">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">员工姓名</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control validate[required]" name="empName" value="{$Think.session.empName}" readonly="readonly" placeholder="员工姓名" autocomplete="off">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label">订单编号</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control validate[required]" name="orderNo" value="{$orderNo}" placeholder="订单编号" autocomplete="off">
+						</div>
+					</div>
+					
+					<notempty name="orderNo">
+					<div class="form-group">
+						<label class="col-sm-3 control-label">聊天文件名</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control"  value="{$filename}" placeholder="聊天文件名" autocomplete="off">
+							<p class="help-block">系统自动生成 仅供参考 具体请仔细核对 正确直接给聊天文件使用</p>
+						</div>
+					</div>
+					</notempty>
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label">记录上传</label>
+						<div class="col-sm-9">
+							<input type="file" name="file_upload" id="file_upload_1" />
+                        	<input type="hidden" name="sourceIds" id="sourceIds" value="">
+                        	<p class="help-block">支持mht，doc，rar，zip格式的文件上传</p>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<div class="col-sm-9 col-sm-offset-3">
+							<button type="submit" class="btn btn-blue">提交</button>
+						</div>
+					</div>
+				</form>
+
+			</div>
+			<div class="col-xs-12 col-lg-6">
+				<div class="panel panel-bordered panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">已上传聊天记录</h3>
+						<!-- JS插件参数说明：http://www.dropzonejs.com/ -->
+					</div>
+					<div class="panel-body">
+						<div class="nofile">暂未上传聊天记录</div>
+						<div class="uploaded"></div>
+					</div>
+				</div>
+
+				
+				<br/>
+			</div>
+		</div>
+		<!--创建投票  结束-->
+
+	</div>
+</div>
+</div>
+	
+</block>
+
+<block name="scripts">
+<script src="RES{:C('DEFAULT_THEME')}/resources/bootstrap-select/js/bootstrap-select.min.js"></script>
+<script src="RES{:C('DEFAULT_THEME')}/resources/bootstrap-select/js/i18n/defaults-zh_CN.js"></script>
+<link rel="stylesheet" href="RES{:C('DEFAULT_THEME')}/resources/icheck-1.x/skins/all.css" />
+<script src="RES{:C('DEFAULT_THEME')}/resources/icheck-1.x/icheck.min.js"></script>
+<script type="text/javascript" src="RES{:C('DEFAULT_THEME')}/resources/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="RES{:C('DEFAULT_THEME')}/resources/uploadify/jquery.uploadify.min.js"></script>
+
+<script type="text/javascript">
+	$('input').iCheck({
+		checkboxClass: 'icheckbox_minimal',
+		radioClass: 'iradio_minimal',
+		increaseArea: '20%' // optional
+	});
+	$('.selectpicker').selectpicker();
+
+	$(function() {
+        $("#file_upload_1").uploadify({
+        	multi         : false,
+            height        : 30, //按钮高度
+            swf           : '/data/assets/default/resources/uploadify/uploadify.swf',
+            uploader      : '/Sale/Chat/upload', //后端处理地址 这里使用的是Tp框架
+            width         : 120, //按钮宽度
+            buttonText    : '点击上传聊天记录', //按钮文字
+            formData     : {
+	                'PHPSID' : '<?php echo session_id(); ?>',
+	        },
+            onInit: function () {
+              //#file_upload_1 对应文本id属性值
+              // $("#file_upload_1-queue").hide();
+            },
+            onUploadSuccess:function(file, res, response) {
+                // var data=eval('('+res+')');
+                var data=eval('('+res+')');
+                var data=JSON.parse(res);
+                if(data.error==0){
+                    $('input[name=sourceIds]').val(data.sourceId);
+                    $('.nofile').remove();
+                    $('.uploaded').html($('<p>'+data.path+'</p>'));
+                }else{
+                    layer.msg(data.error);
+                }
+            } 
+        });
+    });
+</script>
+
+<script src="RES{:C('DEFAULT_THEME')}/resources/jQuery-Validation-Engine/js/jquery.validationEngine-zh_CN.js"></script>
+<script src="RES{:C('DEFAULT_THEME')}/resources/jQuery-Validation-Engine/js/jquery.validationEngine.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		jQuery("#myForm").validationEngine({"scroll":false,"promptPosition":"inline","addPromptClass": 'formError-noArrow formError-small formError-text'});
+	    $("#myForm").submit(function(){
+	        if( jQuery('#myForm').validationEngine('validate')){
+	           if($('#sourceIds').val()==''){
+	                layer.msg("请上传聊天记录",{offset:'100px'});
+	                return false;
+	            }
+	            $.ajax({
+                    type:"POST",
+                    dataType:"json",
+                    url:'{:U("add")}',
+                    data:$('#myForm').serialize(),
+                    beforeSend:function(){
+                        this.loading = layer.load(2, {
+                            shade: [0.1, '#000']
+                        });
+                    },
+                    success:function(res){
+                        layer.close(this.loading);
+                        if(res.error==0){
+                            layer.msg('聊天记录成功,页面即将跳转至“聊天资源”', {
+                                icon: 1,
+                                time:2000
+                            },function(){
+                                window.location.href="{:U('ChatSource/index')}";
+                            });
+                        }else if(res.error==-1){
+                            layer.msg(res.msg, {
+                                icon: 2,
+                                time:2000
+                            });
+                        }else if(res.error==1){
+                            layer.msg('操作失败，请稍后再试', {
+                                icon: 2
+                            });
+                        }else if(res.error==2){
+                            layer.msg('订单编号错误', {
+                                icon: 2
+                            });
+                        }else if(res.error==3){
+                            layer.msg('您已经上传过该订单，请不要重复上传', {
+                                icon: 2
+                            });
+                        }
+                    }
+                });
+	        }
+	        return false;
+	    });
+	});
+</script>
+
+</block>

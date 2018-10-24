@@ -1,0 +1,707 @@
+<extend name="./App/Common/View/default/base.html"/>
+
+<block name="title">
+添加订单-销售管理-
+</block>
+
+<block name="menu">
+    {:W('Common/Cat/menu',array('Sale/Order/add'))}
+</block>
+
+<block name="css">
+ <link href="RES{:C('DEFAULT_THEME')}/resources/jQuery-Validation-Engine/css/validationEngine.jquery.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="RES{:C('DEFAULT_THEME')}/resources/uploadify/uploadify.css">
+</block>
+
+<block name="breadcrumb">
+<div class="row _breadcrumb">
+    <div class="col-xs-12">
+        <ol class="breadcrumb">
+            添加订单 <a href="{:U('index')}" class="btn btn-xs btn-primary">订单列表</a> 
+            <li class="_msg">美德与财富很难集于一人之身。——罗·伯顿</li>
+        </ol>
+
+        <ul class="breadcrumb">
+            <li><i class="fa fa-home"></i>首页</li>
+            <li><a>销售管理</a></li>
+            <li class="active"><a>添加订单</a></li>
+        </ul>
+    </div>
+</div>
+</block>
+
+<block name="content">
+<div class="panel">
+    <div class="panel-body">
+        <form class="form-horizontal hori-borderd" action="__ACTION__" method="POST" id="myForm">
+            <div class="form-group" id="name">
+                <label class="col-sm-2 control-label">QQ</label>
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <input type="text" class="form-control validate[required,custom[qq]]" id="qq" placeholder="可以输入qq号快捷搜索" name="qq" <notempty name="customer">value="{$customer.qq}"</notempty> >
+                        <span class="input-group-btn">
+                            <empty name="customer">
+                            <!-- <button class="btn btn-default" type="button" data-toggle="modal" data-target="#sele_cusm">请选择客户</button> -->
+                            <button class="btn btn-default" type="button" id="searchQq">搜索</button>
+                            <empty>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <eq name="Think.session.deptId" value="26">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">来源</label>
+                <div class="col-sm-2">
+                    <select class="selectpicker" data-width="100%" data-size="5" data-style="btn-cy btn-sm" name="sourceId">
+                        <option value="">请选择</option>
+                        <volist name="sourceList" id="v">
+                        <option text="{$v.sourceName}" <eq name="v.sourceName" value="$customer.source">selected="selected"</eq> value="{$v.id}" >{$v.sourceName}</option>
+                        </volist>
+                    </select>
+                </div>
+                <div class="col-sm-8">
+                    <div class="_addorder-from">
+                        <notempty name="usingSource">
+                        <volist name="usingSource" id="v">
+                        <span val="{$v.sourceId}" class="usingSource">{$v.sourceName}</span>
+                        </volist>
+                        </notempty>
+                    </div>                                  
+                </div>
+            </div>
+            </eq>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">讲师</label>
+                <div class="col-sm-2">
+                    <select class="selectpicker" data-width="100%" data-size="5" data-style="btn-cy btn-sm" name="teacherId">
+                        <option value="">请选择…</option>
+                        <volist name="teacherList" id="v">
+                        <option value="{$v.id}">{$v.teacherName}</option>
+                        </volist>
+                    </select>
+                </div>
+                <div class="col-sm-8">
+                    <div class="_addorder-from">
+                        <notempty name="usingTeacher">
+                        <volist name="usingTeacher" id="v">
+                        <span val="{$v.teacherId}" class="usingTeacher">{$v.teacherName}</span>
+                        </volist>
+                        </notempty>
+                    </div>                                  
+                </div>
+            </div>
+            <div class="form-group" id="isNew">
+                <label class="col-sm-2 control-label">新增</label>
+                <div class="col-sm-9">
+                    <div class="row">
+                        <div class="radio-custom radio-default radio-inline">
+                            <input type="radio" id="inputHorizontalMale" name="isNew"  <in name="Think.session.deptId" value="30,31,32,33"><else/>checked="checked"</in> value="1">
+                            <label for="inputHorizontalMale">是</label>
+                        </div>
+                        <div class="radio-custom radio-default radio-inline">
+                            <input type="radio" id="inputHorizontalFemale" name="isNew"  <in name="Think.session.deptId" value="30,31,32,33">checked="checked"</in> value="5">
+                            <label for="inputHorizontalFemale">上拽</label>
+                        </div>
+                        <div class="radio-custom radio-default radio-inline">
+                            <input type="radio" id="inputHorizontalFemale" name="isNew"  <in name="Think.session.deptId" value="26">checked="checked"</in> value="6">
+                            <label for="inputHorizontalFemale">续费</label>
+                        </div>
+                        <div class="radio-custom radio-default radio-inline">
+                            <input type="radio" id="inputHorizontalFemale" name="isNew" value="7">
+                            <label for="inputHorizontalFemale">其他（小于2000）</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-2 control-label">客户姓名</label>
+                <div class="col-sm-6">
+                    <div class="input-group">
+                        <input type="text" class="form-control validate[required]" placeholder="客户姓名" name="name" <notempty name="customer">value="{$customer.name}"</notempty> >
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">用户编号</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control validate[required,custom[em]]"  placeholder="用户编号" name="emNum" <notempty name="customer">value="{$customer.emNum}"<else/>value=""</notempty>>
+                    <p class="help-block">请输入用户编号</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">电话</label>
+                <div class="col-sm-10">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <input type="text" class="form-control validate[required,custom[mobile]]" name="mobile" placeholder="客户手机" <notempty name="customer">value="{$customer.mobile}"</notempty>>
+                            <!-- <p class="help-block">请填写正确手机号</p> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">客户地址</label>
+                <div class="col-sm-9">
+                <div class="col-sm-9">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <select class="selectpicker" data-width="100%" data-size="5" data-style="btn-cy btn-sm" id="province">
+                            <option value="">请选择</option>
+                            </select>
+                            <input type="hidden" name="province" id="">
+                        </div>
+                        <div class="col-sm-2">
+                            <select class="selectpicker" name="city" data-width="100%" data-size="5" data-style="btn-cy btn-sm" id="city">
+                                <option value="">请选择</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control input-sm" name="address" value="{$customer.address|default=''}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">收款日期</label>
+                <div class="col-sm-2">
+                    <input type='text' class="form-control validate[required]" name="collectDate" onClick="WdatePicker({maxDate:'%y-%M-%d'})"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">收款金额</label>
+                <div class="col-sm-2">
+                    <input type="text" class="form-control validate[required,custom[number]]" name="price" >
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">订单编号</label>
+                <div class="col-sm-5">
+                    <input type="text" class="form-control validate[required,ajax[ajaxOrdersnCallPhp],custom[onlyLetterNumber]]" name="orderNo" id="orderNo">
+                </div>
+            </div>
+           <!--  <div class="form-group">
+                <label class="col-sm-2 control-label">销售人员</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control validate[required]" disabled="disabled" placeholder="搜索用户名或者工号自动匹配">
+                </div>
+            </div> -->
+            <div class="form-group">
+                <label class="col-sm-2 control-label">产品名称</label>
+                <div class="col-sm-4">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <select class="selectpicker" data-width="100%" data-size="5" data-style="btn-cy btn-sm" id="firstProduct">
+                                <option value="">请选择</option>
+                                <volist name="firstProduct" id="v">
+                                <option value="{$v.id}">{$v.productName}</option>
+                                </volist>
+                            </select>
+                        </div>
+                        <div class="col-sm-8">
+                            <select class="selectpicker" data-width="100%" data-size="5" data-style="btn-cy btn-sm" name="productId" id="productId">
+                                <option value="">请选择</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="_addorder-from">
+                        <notempty name="usingProduct">
+                        <volist name="usingProduct" id="v">
+                        <span val="{$v.pid}" id="{$v.productId}" class="usingProduct">{$v.productName}</span>
+                        </volist>
+                        </notempty>
+                    </div>                                  
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-2 control-label">订单状态</label>
+                <div class="col-sm-5">
+                    <input type="text" class="form-control" name="status" >
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">订单备注</label>
+                <div class="col-sm-9">
+                    <textarea class="form-control" placeholder="订单备注" name="beizhu"></textarea>
+                </div>
+            </div>
+            <!-- <div class="form-group">
+                <label class="col-sm-2 control-label">是否退单</label>
+                <div class="col-sm-9">
+                    <div class="row">
+                        <div class="radio-custom radio-default radio-inline">
+                            <input type="radio" id="inputHorizontalMale" name="inputRadiosMale2">
+                            <label for="inputHorizontalMale">是</label>
+                        </div>
+                        <div class="radio-custom radio-default radio-inline">
+                            <input type="radio" id="inputHorizontalFemale" name="inputRadiosMale2" checked="">
+                            <label for="inputHorizontalFemale">否</label>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <div class="form-group">
+                <div class="col-sm-9 col-sm-offset-2">
+                    <input type="hidden" name="customerId" <notempty name="customer">vaule="{$customer.id}"<else/>value="0"</notempty>>
+                    <input type="hidden" name="empId" value="{$Think.session.empId}">
+                    <button type="submit" class="btn btn-info">提交</button>
+                    <button type="reset" class="btn btn-default btn-outline">复位</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal fade" id="sele_cusm">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+                    <div class="form-inline">
+                        <div class="form-group form-group-sm">
+                            <label for="exampleInputName2">QQ号</label>
+                            <input type="text" class="form-control" name="searchQQ" id="searchQQ" placeholder="QQ号搜索">
+                        </div>
+                        <button type="button" class="btn btn-cy-search btn-sm" id="customerSearch">搜索</button>
+                    </div>
+            </div>
+            <div class="modal-body">
+                <div class="list-group">
+                   请输入qq号进行客户匹配
+                   <!--  <button type="button" class="list-group-item">张三【运营部】</button>
+                    <button type="button" class="list-group-item">张三丰【网络事业部】</button>
+                    <button type="button" class="list-group-item">张三丰【网络事业部】</button>
+                    <button type="button" class="list-group-item">Porta ac consectetur ac</button>
+                    <button type="button" class="list-group-item">Vestibulum at eros</button> -->
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+</block>
+
+<block name="scripts">
+<script type="text/javascript" src="RES{:C('DEFAULT_THEME')}/resources/My97DatePicker/WdatePicker.js"></script>
+<script src="RES{:C('DEFAULT_THEME')}/js/country.js"></script>
+<script type="text/javascript">
+
+    $('#firstProduct').change(function(){
+        if($('#firstProduct').val() < 1 ) return false;
+        $.ajax({
+            type:"post",
+            dataType:"json",
+            data:{
+                'id':$('#firstProduct').val()
+            },
+            url:'{:U("Product/getChildren")}',
+            success:function(res){
+                if(res.error==0){
+                    var str='';
+                    $(res.products).each(function(k,v){
+                        str+= '<option value="'+v.id+'">'+v.productName+'</option>';
+                    });
+                    $('#productId').html('').append(str).val('{$productId}');
+                    $('.selectpicker').selectpicker('refresh');
+                }else{
+                    layer.msg('产品获取失败，请稍后再试', {
+                        icon: 2
+                    });
+                }
+            }
+        }); 
+    });
+    
+    $('input').iCheck({
+        checkboxClass: 'icheckbox_minimal',
+        radioClass: 'iradio_minimal',
+        increaseArea: '20%' // optional
+    });
+    $('.selectpicker').selectpicker();
+
+    var province='';
+    $(country).each(function(k,v){
+        province+='<option value="'+k+'">'+v.name+'</option>';
+    });
+    $('#province').append(province);
+    $('.selectpicker').selectpicker("refresh");
+
+    var customers=[];
+    var k=0;
+    $('#province').change(function(f){
+        var str='<option value="">请选择</option>';
+        var k=$(this).val();
+        $('input[name=province]').val(country[k]['name']);
+        $('#city').html('');
+        $(country[k]['city']).each(function(k,v){
+            str+='<option value="'+v.name+'">'+v.name+'</option>'
+        });
+
+        $('#city').append(str);
+        $('.selectpicker').selectpicker("refresh");
+    });
+
+    var p='{$customer.province}';
+    if(p!=''){
+        $('#province option:contains("'+p+'")').attr("selected","selected");
+        $('#province').trigger('change');
+    }
+
+    var c='{$customer.city}';
+    if(c!=''){
+        $('#city').val(c);
+    }
+    $('.selectpicker').selectpicker("refresh");
+</script>
+
+
+<script type="text/javascript">
+    var addUrl='{:U("add")}';
+    var type=1;
+    var unusual=0;
+</script>
+<script src="RES{:C('DEFAULT_THEME')}/resources/jQuery-Validation-Engine/js/jquery.validationEngine-zh_CN.js"></script>
+<script src="RES{:C('DEFAULT_THEME')}/resources/jQuery-Validation-Engine/js/jquery.validationEngine.min.js"></script>
+<script type="text/javascript" src="RES{:C('DEFAULT_THEME')}/resources/uploadify/jquery.uploadify.min.js"></script>
+<script type="text/javascript">
+$(function(){
+
+    jQuery("#myForm").validationEngine({"scroll":false,"promptPosition":"inline","addPromptClass": 'formError-noArrow formError-small formError-text'});
+    $("#myForm").submit(function(){
+        if( jQuery('#myForm').validationEngine('validate')){
+            if($('select[name=sourceId]').val()==''){
+                layer.msg("请选择来源",{icon:2});
+                return false;
+            }
+
+            if($('#productId').val()==''){
+                layer.msg("请选择产品",{icon:2});
+                return false;
+            }
+
+            if(unusual==1){
+                if($('input[name=joinTime]').val()==''){
+                    layer.msg("请完善该客户进群时间",{icon:2});
+                    return false;
+                }
+
+                if($('input[name=chatSource]').val()==''){
+                    layer.msg("请完善该客户聊天记录",{icon:2});
+                    return false;
+                }
+            }
+
+            var customerInfo='客户姓名：'+$('input[name=name]').val()+"<br/>用户编号："+$('input[name=emNum]').val()+"<br/>qq号："+$('#qq').val()+"<br/>电话："+$('input[name=mobile]').val()+"<hr/><span class='text-danger'>网络技术部温馨提示</span>：<br/><span class='text-danger'>客户信息请核对正确后提交，感谢您的配合。</span>";
+            layer.confirm(customerInfo, {icon: 3, title:'客户信息核对'}, function(index) {
+                layer.close(index);
+                $.ajax({
+                    type:"POST",
+                    dataType:"json",
+                    url:'{:U("addNew")}',
+                    data:$('#myForm').serialize(),
+                    beforeSend:function(){
+                        this.loading = layer.load(2, {
+                            shade: [0.1, '#000']
+                        });
+                    },
+                    success:function(res){
+                        layer.close(this.loading);
+                        if(res.error==0){
+                            layer.msg('订单添加成功,页面即将跳转至“订单列表”', {
+                                icon: 1,
+                                time:2000
+                            },function(){
+                                window.location.href="{:U('index')}";
+                            });
+                        }else if(res.error==-1){
+                            layer.msg(res.msg, {
+                                icon: 2,
+                                time:2000
+                            });
+                        }else if(res.error==1){
+                            layer.msg('操作失败，请稍后再试', {
+                                icon: 2
+                            });
+                        }else if(res.error==-2){
+                            layer.msg("资源数据库未找到该客户，请联系综合管理中心（专人）", {
+                                icon: 2,
+                                time:2000
+                            });
+                        }else if(res.error==-3){
+                            layer.msg("2000元以下请选择非新增，具体请查看公司订单规范制度", {
+                                icon: 2,
+                                time:2000
+                            });
+                        }
+                    }
+                });
+            });
+        }
+        return false;
+    });
+    
+    $('#customerSearch').click(function(){
+        var qq=$('input[name=searchQQ]').val();
+        if(qq==''){
+            layer.msg('请输入要搜索的qq号',{icon:2});
+            return false;
+        }
+        var loading=null;
+        $.ajax({
+            type:"POST",
+            dataType:"json",
+            data:{
+                qq:qq
+            },
+            timeout:10000,
+            url:"{:U('Customer/Customer/getCustomer')}",
+            beforeSend:function(){
+                loading=layer.load(2);
+            },
+            success:function(res){
+                layer.close(loading);
+                var str='';
+                customer=[];
+                if(res.error==0){
+                    $(res.customers).each(function(k,v){
+                        customer[k]=v;
+                        str+='<button type="button" val="'+k+'" class="list-group-item">[姓名]'+v.name+'-[QQ]'+v.qq+'-[电话]'+v.mobile+'-[用户编号]'+v.emNum+'</button>';
+                    });
+                    $('.list-group').html(str);
+                }else{
+                    str='对不起，没有查找到该客户!';
+                    $('.list-group').html(str);
+                }
+            },
+            error:function(){
+                layer.close(loading);
+                layer.msg('服务器压力大，请稍后再试',{icon:2});
+            }
+        });
+    });
+
+
+    $('#searchQq').click(function(){
+        var qq=$('#qq').val();
+        if(qq==''){
+            layer.msg('请输入要搜索的qq号',{icon:2});
+            return false;
+        }
+        var loading=null;
+        $.ajax({
+            type:"POST",
+            dataType:"json",
+            data:{
+                qq:qq
+            },
+            timeout:10000,
+            url:"{:U('Customer/Customer/getCustomer')}",
+            beforeSend:function(){
+                loading=layer.load(2);
+            },
+            success:function(res){
+                layer.close(loading);
+                var str='';
+                customer=[];
+                if(res.error==0){
+                    $('input[name=name]').val(res.customer.name);
+                    $('input[name=mobile]').val(res.customer.mobile);
+                    $('#qq').val(res.customer.qq);
+                    $('input[name=emNum]').val(res.customer.emNum);
+                    $('input[name=customerId]').val(res.customer.id);
+                    if(res.customer.province!=''){
+                        $('#province option:contains("'+res.customer.province+'")').attr("selected","selected");
+                        $('#province').trigger('change');
+                        setTimeout(function(){
+                             $('#city option:contains("'+res.customer.city+'")').attr("selected","selected");
+                             $('.selectpicker').selectpicker('refresh');
+                        },500);
+                    }
+
+                    // if(res.customer.source!=''){
+                    //     $('select[name=sourceId]').find('option[text='+res.customer.source+']').attr("selected","selected");
+                    //     // alert($('select[name=sourceId]').find('option[text='+res.customer.source+']').html())
+                    //     // alert(res.customer.source)
+                    //     $('.selectpicker').selectpicker('refresh');
+                    // }
+                    
+                    $('input[name=address]').val(res.customer.address);
+                    // $('input[name=searchQQ]').val('');
+                    if(res.customer.gTime!=''){
+                        $('#gTime').remove();
+                        $('#name').after('<div class="form-group" id="gTime">\
+                                            <label class="col-sm-2 control-label">进群时间</label>\
+                                            <div class="col-sm-4">\
+                                                    <input type="text" readonly="readonly"  class="form-control" placeholder="进群时间" value="'+res.customer.gTime+'" >\
+                                            </div>\
+                                        </div>');
+                    }
+
+                    if(res.customer.source!=''){
+                        $('#source').remove();
+                        $('#name').after('<div class="form-group" id="source">\
+                                            <label class="col-sm-2 control-label">来源</label>\
+                                            <div class="col-sm-4">\
+                                                    <input type="text" readonly="readonly"  class="form-control" placeholder="进群时间" value="'+res.customer.source+'" >\
+                                            </div>\
+                                        </div>');
+                    }
+                }else{
+                    layer.msg('对不起，没有查找到该客户!');
+                    $('input[name=name]').val('');
+                }
+            },
+            error:function(){
+                layer.close(loading);
+                layer.msg('服务器压力大，请稍后再试',{icon:2});
+            }
+        });
+    });
+
+    $('.list-group').on('click','.list-group-item',function(){
+        k=$(this).attr('val');
+        // $('input[name=name]').val(customer[k]['name']).attr("disabled","disabled");
+        // $('input[name=mobile]').val(customer[k]['mobile']).attr("disabled","disabled");
+        // $('input[name=qq]').val(customer[k]['qq']).attr("disabled","disabled");
+        // $('input[name=emNum]').val(customer[k]['emNum']).attr("disabled","disabled");
+        $('input[name=name]').val(customer[k]['name']);
+        $('input[name=mobile]').val(customer[k]['mobile']);
+        $('#qq').val(customer[k]['qq']);
+        $('input[name=emNum]').val(customer[k]['emNum']);
+        $('input[name=customerId]').val(customer[k]['id']);
+        $('#province option:contains("'+customer[k]['province']+'")').attr("selected","selected");
+        $('#province').trigger('change');
+        setTimeout(function(){
+             $('#city option:contains("'+customer[k]['city']+'")').attr("selected","selected");
+             $('.selectpicker').selectpicker('refresh');
+        },500);
+        $('input[name=address]').val(customer[k]['address']);
+        $('input[name=searchQQ]').val('');
+        $('.list-group').html('请输入qq号进行客户匹配');
+        $('#sele_cusm').modal('hide');
+    });
+
+    
+    $('input:radio[name=isNew]').on('ifChecked', function(event){
+        var value=$(this).val();
+        $.ajax({
+            type:"POST",
+            dataType:"json",
+            data:{
+                isNew:value
+            },
+            url:'{:U("checkUnusual")}',
+            success:function(res){
+                if(res.error==1){
+                    unusual=1;
+                    $('#joinTime').remove();
+                    $('#chatSource').remove();
+                    $('#isNew').after('<div class="form-group" id="joinTime">\
+                <label class="col-sm-2 control-label">进群时间：</label>\
+                <div class="col-sm-9" >\
+                    <input type="text" class="form-control validate[required]"  onClick="WdatePicker({maxDate:\'%y-%M-%d\'})" name="joinTime" placeholder="新增录上拽异常 请填写该用户入群时间">\
+                </div>\
+            </div>\
+            <div class="form-group" id="chatSource">\
+                <label class="col-sm-2 control-label">相关证明：</label>\
+                <div class="col-sm-9" >\
+                    <input type="file" class="form-control" name="" id="file_upload_1">\
+                    <input type="hidden" name="chatSource"/>\
+                    <div id="chat"></div>\
+                     <p class="help-block">新增录上拽或续费异常 请上传聊天记录,截图等以便审核</p>\
+                </div>\
+            </div>');
+                    $("#file_upload_1").uploadify({
+                        height        : 30, //按钮高度
+                        swf           : '/data/assets/default/resources/uploadify/uploadify.swf',
+                        uploader      : '/Sale/Order/chatSourceUpload', //后端处理地址 这里使用的是Tp框架
+                        width         : 120, //按钮宽度
+                        buttonText    : '选择相关证明', //按钮文字
+                        formData     : {
+                            'PHPSID' : '<?php echo session_id(); ?>',
+                        },
+                        onInit: function () {
+                          //#file_upload_1 对应文本id属性值
+                          $("#file_upload_1-queue").hide();
+                        },
+                        onUploadSuccess:function(file, res, response) {
+                            // var data=eval('('+res+')');
+                            var data=JSON.parse(res);
+                            if(data.error==0){
+                               //TODO
+                               $('input[name=chatSource]').val(data.path);
+                               $('#chat').html(data.path);
+                               layer.msg("上传成功");
+                            }else{
+                                layer.msg(data.error);
+                            }
+                            
+                        } 
+                    });
+                }else if(res.error==0){
+                    unusual=0;
+                    $('#joinTime,#chatSource').remove();
+                }
+            }
+        });
+    });
+
+    $('.usingSource').click(function(){
+        var id=$(this).attr('val');
+        $(this).addClass('active').siblings().removeClass('active');
+        $('select[name=sourceId]').val(id);
+        $('.selectpicker').selectpicker('refresh');
+    });
+
+    $('.usingTeacher').click(function(){
+        var id=$(this).attr('val');
+        $(this).addClass('active').siblings().removeClass('active');
+        $('select[name=teacherId]').val(id);
+        $('.selectpicker').selectpicker('refresh');
+    });
+
+    $('.usingProduct').click(function(){
+        var id=$(this).attr('id');
+        var pid=$(this).attr('val');
+        $(this).addClass('active').siblings().removeClass('active');
+        $('#firstProduct').val(pid);
+        // $('#firstProduct').trigger('change');
+        
+        $.ajax({
+            type:"post",
+            dataType:"json",
+            data:{
+                'id':$('#firstProduct').val()
+            },
+            url:'{:U("Product/getChildren")}',
+            success:function(res){
+                if(res.error==0){
+                    var str='';
+                    $(res.products).each(function(k,v){
+                        str+= '<option value="'+v.id+'">'+v.productName+'</option>';
+                    });
+                    $('#productId').html('').append(str).val('{$productId}');
+                    $('#productId').val(id);
+                    $('.selectpicker').selectpicker('refresh');
+                }else{
+                    layer.msg('产品获取失败，请稍后再试', {
+                        icon: 2
+                    });
+                }
+            }
+        });
+
+        $('.selectpicker').selectpicker('refresh');
+    });
+
+});
+</script>
+</block>

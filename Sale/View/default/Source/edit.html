@@ -1,0 +1,37 @@
+<div class="form-group">
+    <label class="col-sm-2 control-label">来源</label>
+    <div class="col-sm-9">
+        <input type="text" class="form-control validate[required]" name="sourceName" value="{$sourceName}" placeholder="来源" autocomplete="off">
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-2 control-label">是否显示</label>
+    <div class="col-sm-9">
+        <div class="row">
+            <div class="radio-custom radio-default radio-inline">
+                <input type="radio" id="inputHorizontalMale" name="isShow" <eq name="isShow" value="1">checked="checked"</eq> value="1">
+                <label for="inputHorizontalMale">是</label>
+            </div>
+            <div class="radio-custom radio-default radio-inline">
+                <input type="radio" id="inputHorizontalFemale" name="isShow" <eq name="isShow" value="2">checked="checked"</eq> value="2">
+                <label for="inputHorizontalFemale">否</label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-2 control-label">排序</label>
+    <div class="col-sm-9">
+        <input type="text" class="form-control validate[required]" name="rank" value="{$rank}" placeholder="排序" autocomplete="off">
+        <p class="help-block">数字越小，越靠前</p>
+    </div>
+</div>
+<input type="hidden" name="id" value="{$id}">
+<script type="text/javascript">
+    $('input').iCheck({
+        checkboxClass: 'icheckbox_minimal',
+        radioClass: 'iradio_minimal',
+        increaseArea: '20%' // optional
+    });
+    $('.selectpicker').selectpicker();
+</script>

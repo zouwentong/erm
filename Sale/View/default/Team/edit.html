@@ -1,0 +1,86 @@
+<div class="form-group">
+    <label class="col-sm-2 control-label">团队名称</label>
+    <div class="col-sm-9">
+        <input type="text" class="form-control validate[required]" name="teamName" placeholder="团队名称" value="{$teamName}" autocomplete="off">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-2 control-label">区域</label>
+    <div class="col-sm-9">
+        <select class="selectpicker  validate[required]" data-width="50%" data-size="5" data-style="btn-cy btn-sm" name="areaId">
+            <volist name="teamArea" id="v">
+            <option value="{$v.id}" <eq name="areaId" value="$v.id">selected="selected"</eq> >{$v.areaName}</option>
+            </volist>
+        </select>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-2 control-label">主管</label>
+    <div class="col-sm-9">
+        <input type="text" class="form-control validate[required]" name="teamLeader" placeholder="团队主管" value="{$leader}" autocomplete="off" id="teamLeader">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-2 control-label">经理</label>
+    <div class="col-sm-9">
+        <input type="text" class="form-control validate[required]" name="teamManager" placeholder="团队经理" value="{$manager}" autocomplete="off" id="teamManager">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-2 control-label">团队头像</label>
+    <div class="col-sm-9">
+        <input type="file" name="file_upload" id="file_upload_2" >
+        <div class="col-sm-8" id="viewPic">
+            <notempty name="pic">
+            <img id="viewPic" src="{$pic}" width="100" alt="">
+            </notempty>
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-2 control-label">团队简介</label>
+    <div class="col-sm-9">
+        <input type="text" class="form-control" name="teamDesc" value="{$teamDesc}"  placeholder="简介" autocomplete="off">
+    </div>
+</div>
+ <input type="hidden" name="pic" value="{$pic|default=''}">
+<input type="hidden" name="id" value="{$id}">
+<script type="text/javascript">
+    $('input').iCheck({
+        checkboxClass: 'icheckbox_minimal',
+        radioClass: 'iradio_minimal',
+        increaseArea: '20%' // optional
+    });
+    $('.selectpicker').selectpicker();
+
+    $(function() {
+        $("#file_upload_2").uploadify({
+            height        : 30, //按钮高度
+            swf           : '/data/assets/default/resources/uploadify/uploadify.swf',
+            uploader      : '/Sale/Team/upload', //后端处理地址 这里使用的是Tp框架
+            width         : 120, //按钮宽度
+            buttonText    : '选择图片', //按钮文字
+            onInit: function () {
+              //#file_upload_1 对应文本id属性值
+              $("#file_upload_2-queue").hide();
+            },
+            onUploadSuccess:function(file, res, response) {
+                // var data=eval('('+res+')');
+                var data=JSON.parse(res);
+                if(data.error==0){
+                   //TODO
+                   $('input[name=pic]').val(data.path);
+                   $('#viewPic').html('<img src="'+data.path+'" alt="" width="100">');
+                }else{
+                    layer.msg(data.error);
+                }
+                
+            } 
+        });
+    });
+</script>

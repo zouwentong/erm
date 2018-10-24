@@ -1,0 +1,267 @@
+<extend name="./App/Common/View/default/base.html"/>
+
+<block name="title">
+团队明细-报表统计-
+</block>
+
+<block name="menu">
+    {:W('Common/Cat/menu',array('Sale/Statistics/index'))}
+</block>
+
+<block name="css">
+ <link href="RES{:C('DEFAULT_THEME')}/resources/jQuery-Validation-Engine/css/validationEngine.jquery.css" rel="stylesheet">
+</block>
+
+<block name="breadcrumb">
+<div class="row _breadcrumb">
+    <div class="col-xs-12">
+        <ol class="breadcrumb">
+            团队明细
+            <!-- <li class="_msg">分配的结构完全决定于生产的结构，分配本身就是生产的产物，不仅就对象说是如此《马克思》</li> -->
+        </ol>
+
+        <ul class="breadcrumb">
+            <li><i class="fa fa-home"></i>首页</li>
+            <li><a>报表统计</a></li>
+            <li class="active"><a>团队明细</a></li>
+        </ul>
+    </div>
+</div>
+</block>
+
+<block name="content">
+
+<div class="_contain">
+	<div class="_title-left">
+		<strong>团队个人明细</strong>
+		<ul class="nav nav-tabs _tab-right" role="tablist">
+			<?php
+	            if ($auth->check('Sale/Statistics/teamDetail', session('empId')) || session('empId') == C('CFG_MANAGER_ID')):
+			?>
+			<li role="presentation"><a href="{:U('Sale/Statistics/teamDetail')}">团队个人统计报表</a></li>
+			<?php endif; ?>
+			<?php
+	            if ($auth->check('Sale/Statistics/team', session('empId')) || session('empId') == C('CFG_MANAGER_ID')):
+			?>
+			<li role="presentation"  class="active"><a href="{:U('Sale/Statistics/team')}" >团队报表</a></li>
+			<?php endif; ?>
+			<?php
+	            if ($auth->check('Sale/Statistics/central', session('empId')) || session('empId') == C('CFG_MANAGER_ID')):
+			?>
+			<li role="presentation"><a href="{:U('Sale/Statistics/central')}" >各中心报表</a></li>
+			<?php endif; ?>
+		</ul>
+	</div>
+
+	<!--用户列表  开始-->
+	<div class="tab-content">
+		<div role="tabpanel" class="tab-pane active" id="tab1">
+			<div class="order_list">
+				<div class="panel">
+					<div class="panel-body">
+						<form class="form-inline" action="__ACTION__">
+							<div class="form-group form-group-sm">
+								<label for="name">团队</label>
+								<select class="selectpicker" data-width="auto" data-size="5" data-style="btn-cy btn-sm" name="teamIds[]" multiple>
+									<option value="">请选择…</option>
+									<volist name="teamList" id="v">
+									<option value="{$v.id}" <in name="v.id" value="$Think.get.teamIds">selected="selected"</in>>{$v.teamName}</option>
+									</volist>
+								</select>
+							</div>
+							<div class="form-group form-group-sm">
+								<label for="mobile">月份1</label>
+								<input type="text" class="form-control" id="month1" name="month1" value="<notempty name='Think.get.month1'>{$Think.get.month1}<else/>{$month1}</notempty>" onClick="WdatePicker({dateFmt:'yyyy-MM'})">
+							</div>
+							<div class="form-group form-group-sm">
+								<label for="qq">月份2</label>
+								<input type="text" class="form-control" id="month2" name="month2" value="<notempty name='Think.get.month2'>{$Think.get.month2}<else/>{$month2}</notempty>" onClick="WdatePicker({dateFmt:'yyyy-MM'})">
+							</div>
+							<button type="submit" class="btn btn-cy-search btn-sm">搜索</button>
+						</form>
+					</div>
+				</div>
+				<div class="panel">
+					<div id="container"></div>
+					<div class="panel-body">
+						<div class="table-responsive">
+							<table id="datatable" class="table table-striped table-bordered table-hover cy-table" >
+								<thead>
+							      <tr>
+							        <th></th>
+							        <th>{$month1}</th>
+							        <th>{$month2}</th>
+							      </tr>
+							    </thead>
+							    <tbody>
+							      <volist name="data" id="v">
+							      <tr>
+							        <td title="{$v.teamName}">{$v.teamName|truncate=###,6}</td>
+							        <td title="销售额：{$v.month1OrderPrice}">{$v.month1OrderNum|default="0"}</td>
+							        <td title="销售额：{$v.month2OrderPrice}">{$v.month2OrderNum|default="0"}</td>
+							        <input type="hidden" name="order0{$v.month1OrderNum}-{$i-1}" value="{$v.month1OrderTotalNum}">
+							        <input type="hidden" name="order1{$v.month2OrderNum}-{$i-1}" value="{$v.month2OrderTotalNum}">
+							        <input type="hidden" name="price0{$v.month1OrderNum}-{$i-1}" value="{$v.month1OrderPrice}">
+							        <input type="hidden" name="price1{$v.month2OrderNum}-{$i-1}" value="{$v.month2OrderPrice}">
+							      </tr>
+							      </volist>
+							    </tbody>
+							</table>
+						</div>
+						<nav class="list-pager text-right">
+							<div class="cs-pager">
+							{$page}
+							</div>
+						</nav>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+<!--微信用户列表  结束-->
+</div>
+
+</block>
+
+<block name="scripts">
+<script type="text/javascript" src="RES{:C('DEFAULT_THEME')}/resources/My97DatePicker/WdatePicker.js"></script>
+
+<script type="text/javascript">
+
+/**
+ * Sand-Signika theme for Highcharts JS
+ * @author Torstein Honsi
+ */
+
+// Load the fonts
+Highcharts.createElement('link', {
+	href: 'http://fonts.googleapis.com/css?family=Signika:400,700',
+	rel: 'stylesheet',
+	type: 'text/css'
+}, null, document.getElementsByTagName('head')[0]);
+
+// Add the background image to the container
+Highcharts.wrap(Highcharts.Chart.prototype, 'getContainer', function (proceed) {
+	proceed.call(this);
+	this.container.style.background = 'url(http://www.highcharts.com/samples/graphics/sand.png)';
+});
+
+
+Highcharts.theme = {
+	colors: ["#f45b5b", "#8085e9", "#8d4654", "#7798BF", "#aaeeee", "#ff0066", "#eeaaee",
+		"#55BF3B", "#DF5353", "#7798BF", "#aaeeee"],
+	chart: {
+		backgroundColor: null,
+		style: {
+			fontFamily: "Signika, serif"
+		}
+	},
+	title: {
+		style: {
+			color: 'black',
+			fontSize: '16px',
+			fontWeight: 'bold'
+		}
+	},
+	subtitle: {
+		style: {
+			color: 'black'
+		}
+	},
+	tooltip: {
+		borderWidth: 0
+	},
+	legend: {
+		itemStyle: {
+			fontWeight: 'bold',
+			fontSize: '13px'
+		}
+	},
+	xAxis: {
+		labels: {
+			style: {
+				color: '#6e6e70'
+			}
+		}
+	},
+	yAxis: {
+		labels: {
+			style: {
+				color: '#6e6e70'
+			}
+		}
+	},
+	plotOptions: {
+		series: {
+			shadow: true
+		},
+		candlestick: {
+			lineColor: '#404048'
+		},
+		map: {
+			shadow: false
+		}
+	},
+
+	// Highstock specific
+	navigator: {
+		xAxis: {
+			gridLineColor: '#D0D0D8'
+		}
+	},
+	rangeSelector: {
+		buttonTheme: {
+			fill: 'white',
+			stroke: '#C0C0C8',
+			'stroke-width': 1,
+			states: {
+				select: {
+					fill: '#D0D0D8'
+				}
+			}
+		}
+	},
+	scrollbar: {
+		trackBorderColor: '#C0C0C8'
+	},
+
+	// General
+	background2: '#E0E0E8'
+
+};
+
+// Apply the theme
+Highcharts.setOptions(Highcharts.theme);
+
+$(document).ready(function(){
+
+    $('#container').highcharts({
+        data: {
+            table: document.getElementById('datatable')
+        },
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: '团队统计报表'
+        },
+        yAxis: {
+            allowDecimals: false,
+            title: {
+                text: 'Units'
+            }
+        },
+        tooltip: {
+        	// shared:true,
+            formatter: function() {
+            	// console.log(this);
+                return '<b>'+ this.series.name +'</b><br/>总成交单数：'+$('input[name=order'+this.series._i+this.y+'-'+this.x+']').val()+'<br/>新增订单数：'+
+                    this.y+'<br>销售额：'+$('input[name=price'+this.series._i+this.y+'-'+this.x+']').val();
+            }
+        }
+    });
+});
+</script>
+</block>

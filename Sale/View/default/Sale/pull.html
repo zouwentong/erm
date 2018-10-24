@@ -1,0 +1,38 @@
+<notempty name="szList">
+<table class="table table-bordered table-striped _sale">
+	<caption>
+		服务拓展中心个人销售榜 <!-- <a href="#"><i class="fa fa-angle-right"></i></a><a href="#"><i class="fa fa-angle-left"></i></a> -->
+	</caption>
+	<thead>
+		<volist name="szList" id="v" offset="0" length="1">
+		<tr class="_second">
+			<td colspan="2">
+				<a href="javascript:;"><img src="RES{:C('DEFAULT_THEME')}/img/Ailee.jpg" width="49" height="49" /></a>
+				<div>
+					<h4>{$v.empName}<small>第1名</small></h4>
+					<p><span>共{$v.orderNum}单</span></p>
+				</div>
+			</td>
+			<td colspan="2">
+				<p class="_totalname">总销售额</p>
+				<p class="_totalmoney">￥{$v.orderPrice}</p>
+			</td>
+		</tr>
+		</volist>
+	</thead>
+	<tbody>
+		<volist name="szList" id="v" offset="1">
+		<tr>
+			<td>
+				<a href="javascript:;"><em>{$i+1}</em><img src="{$v.pic}" width="20" height="20" /></a>
+			</td>
+			<td>
+				{$v.empName}<small><i class="fa fa-user"></i> {$v.teamLeader}</small>
+			</td>
+			<td><span>￥{$v.orderPrice}</span></td>
+			<td>单数 {$v.orderNum}</td>
+		</tr>
+		</volist>
+	</tbody>
+</table>
+</notempty>

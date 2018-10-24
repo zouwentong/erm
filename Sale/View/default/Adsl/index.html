@@ -1,0 +1,710 @@
+<extend name="./App/Common/View/default/base.html"/>
+
+<block name="title">
+端口统计
+</block>
+
+
+<block name="css">
+		
+		
+
+		<link href="RES{:C('DEFAULT_THEME')}/resources/icheck-1.x/skins/minimal/minimal.css" rel="stylesheet">
+</block>
+	
+
+
+<block name="content">
+
+					
+					<!--标题 开始-->
+						<div class="row">
+							<div class="col-xs-1 xsxx-head">
+								<form class="form-inline" action="__ACTION__" method="get">
+									
+									<div class="form-group form-group-sm">
+										<label for="mobile">起止时间</label>
+										<input type="text" class="form-control" id="month1_1" name="month1_1" value="<notempty name='Think.get.month1_1'>{$Think.get.month1_1}<else/>{$month1_1}</notempty>" onClick="WdatePicker({dateFmt:'yyyy-MM'})">
+									</div>
+									<div class="form-group form-group-sm">
+										<label for="qq"></label>
+										<input type="text" class="form-control" id="month2_2" name="month2_2" value="<notempty name='Think.get.month2_2'>{$Think.get.month2_2}<else/>{$month2_2}</notempty>" onClick="WdatePicker({dateFmt:'yyyy-MM'})">
+									</div>
+									<button type="submit" class="btn btn-cy-search btn-sm">搜索</button>
+								</form>
+								
+							</div>
+						</div>
+					<!--标题 结束-->
+					
+					<!--端口开发信息表格记录 开始-->
+					<div class="row">
+						<div class="col-xs-12 col-md-3">
+							<table class="table tktj-tabel1  table-hover">
+							      <thead>
+							        <tr>
+							       
+							          <th>端口号</th>
+							          <th>开发率</th>
+							        </tr>
+							      </thead>
+							      <tbody>
+						  <volist name='data4_4' id='v4' >
+							        <tr>
+							          <td>{$v4.sourceName}</td>
+							          <td>{$v4.counts}%</td>
+							        </tr>
+							        </volist>
+							        
+							     <tr>
+									<td  colspan="2" > ...<button type="button" class="btn btn-primary tktj-button" data-toggle="modal" data-target="#myModal1">点击查看更多</button> </td>										
+								</tr>
+								  <volist name='data3_3' id='v3' >
+							        <tr>  
+							          <td>{$v3.sourceName}</td>
+							          <td>{$v3.counts}%</td>
+							        </tr>
+							          </volist>
+							      
+							      </tbody>
+							    </table>
+							    <div class="text-center">总开发率</div>
+						</div>
+						
+						
+						
+							<div class="col-xs-12 col-md-3">
+							<table class="table tktj-tabel1  table-hover">
+							      <thead>
+							        <tr>
+							       
+							          <th>端口号</th>
+							          <th>开发率</th>
+							        </tr>
+							      </thead>
+							      <tbody>
+							        <tr>
+							         
+							          <td>1</td>
+							          <td></td>
+							        </tr>
+							        <tr>
+							         
+							          <td>2</td>
+							          <td></td>
+							        </tr>
+							        <tr>
+							        
+							          <td>3</td>
+							          <td></td>
+							        </tr>
+							        
+							     <tr>
+									<td  colspan="2" > ...<button type="button" class="btn btn-primary tktj-button" data-toggle="modal"  data-target="#myModal2">点击查看更多</button> </td>										
+								</tr>
+							         <tr> 
+							          <td>48</td>
+							          <td></td>
+							        </tr>
+							        <tr>
+							         
+							          <td>49</td>
+							          <td></td>
+							        </tr>
+							        <tr>
+							        
+							          <td>50</td>
+							          <td></td>
+							        </tr>
+							      </tbody>
+							    </table>
+							    <div class="text-center">留存率</div>
+						</div>
+				
+					<div class="col-xs-12 col-md-3">
+							<table class="table tktj-tabel1  table-hover">
+							      <thead>
+							        <tr>
+							       
+							          <th>端口号</th>
+							          <th>开发率</th>
+							        </tr>
+							      </thead>
+							      <tbody>
+							        <tr>
+							         
+							          <td>1</td>
+							          <td></td>
+							        </tr>
+							        <tr>
+							         
+							          <td>2</td>
+							          <td></td>
+							        </tr>
+							        <tr>
+							        
+							          <td>3</td>
+							          <td></td>
+							        </tr>
+							        
+							     <tr>
+									<td  colspan="2" > ...<button type="button" class="btn btn-primary tktj-button" data-toggle="modal" data-target="#myModal3">点击查看更多</button> </td>										
+								</tr>
+							        <tr>
+							          <td>48</td>
+							          <td></td>
+							        </tr>
+							        <tr>
+							         
+							          <td>49</td>
+							          <td></td>
+							        </tr>
+							        <tr>
+							        
+							          <td>50</td>
+							          <td></td>
+							        </tr>
+							      </tbody>
+							    </table>
+							    <div class="text-center">导流率</div>
+						</div>
+				
+				
+					<div class="col-xs-12 col-md-3">
+							<table class="table tktj-tabel1  table-hover">
+							      <thead>
+							        <tr>
+							       
+							          <th>端口号</th>
+							          <th>开发率</th>
+							        </tr>
+							      </thead>
+							      <tbody>
+							        <tr>
+							         
+							          <td>1</td>
+							          <td></td>
+							        </tr>
+							        <tr>
+							         
+							          <td>2</td>
+							          <td></td>
+							        </tr>
+							        <tr>
+							        
+							          <td>3</td>
+							          <td></td>
+							        </tr>
+							        
+							     <tr>
+									<td  colspan="2" > ...<button type="button" class="btn btn-primary tktj-button" data-toggle="modal" data-target="#myModal4">点击查看更多</button> </td>										
+								</tr>
+							        <tr> 
+							          <td>48</td>
+							          <td></td>
+							        </tr>
+							        <tr>
+							         
+							          <td>49</td>
+							          <td></td>
+							        </tr>
+							        <tr>
+							        
+							          <td>50</td>
+							          <td></td>
+							        </tr>
+							      </tbody>
+							    </table>
+							    <div class="text-center">同行率</div>
+						</div>
+				
+				
+				
+					</div>
+					
+					
+		
+				<div class="row">
+							<div class="col-xs-12 xsxx-head">
+								<div class="xsxx-title1 pull-left">端口开发信息折线图记录</div>					
+								<div class="xsxx-title2 pull-right">最后更新时间：2015-9-29 15:19:30</div>
+							</div>
+				</div>
+				
+				
+					<div class="row">
+						<div class="col-xs-12 ">
+							<div class="xsxx-part1-tap">
+								<div class="xsxx-part1-input clearfix">		
+									
+									
+									
+									<span class="pull-right">
+								<form class="form-inline" action="__ACTION__" method="get">
+									<div class="form-group form-group-sm">
+										<label for="mobile">时间1：起止时间</label>
+										<input type="text" class="form-control" id="month1" name="month1" value="<notempty name='Think.get.month1'>{$Think.get.month1}<else/>{$month1}</notempty>" onClick="WdatePicker({dateFmt:'yyyy-MM'})">
+									</div>
+									<div class="form-group form-group-sm">
+										<label for="qq"></label>
+										<input type="text" class="form-control" id="month2" name="month2" value="<notempty name='Think.get.month2'>{$Think.get.month2}<else/>{$month2}</notempty>" onClick="WdatePicker({dateFmt:'yyyy-MM'})">
+									</div>
+
+								<div class="form-group form-group-sm">
+										<label>
+										<?php $iCheck=I('get.iCheck','1') ?>
+										<input type="radio"  name="iCheck" value="1" <?php if($iCheck==1) echo 'checked="checked"'; ?>>
+												总开发率
+										</label>
+										
+										<label>
+										
+											<input type="radio"  name="iCheck" value="2" <?php if($iCheck==2) echo 'checked="checked"'; ?>>
+												广告资源
+										</label>	
+										
+										<label>
+											
+											<input type="radio"  name="iCheck" value="3" <?php if($iCheck==3) echo 'checked="checked"'; ?>>
+												常规资源
+										</label>
+										
+										<label>
+											
+											<input type="radio"  name="iCheck" value="4" <?php if($iCheck==4) echo 'checked="checked"'; ?>>
+												微信资源
+										</label>
+									</div>
+												
+									
+
+
+								<!-- 	<div class="form-group form-group-sm">
+										<label for="mobile">时间2：起止时间</label>
+										<input type="text" class="form-control" id="month3" name="month3" value="<notempty name='Think.get.month3'>{$Think.get.month3}<else/>{$month3}</notempty>" onClick="WdatePicker({dateFmt:'yyyy-MM'})">
+									</div>
+									<div class="form-group form-group-sm">
+										<label for="qq"></label>
+										<input type="text" class="form-control" id="month4" name="month4" value="<notempty name='Think.get.month4'>{$Think.get.month4}<else/>{$month4}</notempty>" onClick="WdatePicker({dateFmt:'yyyy-MM'})">
+									</div> -->
+									<button type="submit" class="btn btn-cy-search btn-sm">搜索</button>
+								</form>
+									</span>
+									
+									
+									
+								</div>				
+								
+								  <div id="container1" style="min-width:700px;height:400px"></div>
+							</div>
+							
+							 <div class="alert alert-warning alert-dismissible fade in xsxx-part1-all" role="alert">
+								     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+									 <i class="fa fa-star xsxx-star"></i>根据各渠道信息统计分析：网络事业中心在同比资源的情况下利用率最高！      
+						    </div>
+							
+						</div>
+					</div>
+				<!--端口开发信息折线图开始-->		
+				
+				</div>
+				
+	
+				
+				
+			</div>
+		</div>
+		<!--右侧内容  结束-->
+
+
+
+		<script type="text/template" id="clndr-template">
+			<h3>
+				<i class="fa fa-calendar"></i>
+				<span><%= year %>.<%= month %></span>
+				<a class="clndr-previous-button"><i class="fa fa-angle-right"></i></a>
+				<a class="clndr-next-button"><i class="fa fa-angle-left"></i></a>
+			</h3>
+			<table class="table _calendar-month">
+				<thead>
+					<tr>
+						<% _.each(daysOfTheWeek, function (day,index) { %>
+							<th>
+								<%= day %>
+							</th>
+							<% }); %>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<% _.each(days, function (day,index) { %>
+							<%if(index>0&&index%7==0){%>
+					</tr>
+					<tr>
+						<%}%>
+							<td class="<%= day.classes %>">
+								<span onclick="createNew(<%= day.day %>)"><%= day.day %></span>
+							</td>
+							<% }); %>
+					</tr>
+				</tbody>
+			</table>
+		</script>
+		
+		<!--跟多信息模态框-->
+		<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="myModal1">
+  			<div class="modal-dialog modal-lg">			
+                <div class="modal-header dktj-modalhader">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title">总开发率</h4>
+			     </div>
+                
+  			  <div class="modal-content tktj_nav">
+    			<table class="table tktj-modal  table-hover">
+							      <thead>
+							     
+							        <tr>							       
+							          <th>端口号</th>
+							          <th>开发率</th>
+							        </tr>
+							      </thead>
+							      <tbody>
+							        <volist name='data2_2' id='v2' >
+							        <tr>
+							          <td>{$v2.sourceName}</td>
+							          <td>{$v2.counts}%</td>
+							        </tr>
+							        </volist>
+							      </tbody>
+							    </table>
+							    
+							   <!--  <nav class="text-center">
+								  <ul class="pagination text-center tktj-page">
+								    <li class=""><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+								    <li class=""><a href="#">1 <span class="sr-only">(current)</span></a></li>
+								    <li class="active"><a href="#">2 <span class="sr-only">(current)</span></a></li>
+								    <li class=""><a href="#">3 <span class="sr-only">(current)</span></a></li>
+								    <li class=""><a href="#">4<span class="sr-only">(current)</span></a></li>
+								    <li class=""><a href="#">5 <span class="sr-only">(current)</span></a></li>
+								    <li class=""><a href="#" aria-label="Next"><span aria-hidden="true">»</span></a></li>
+								  </ul>
+								</nav> -->
+  			  </div>
+  			  
+  			  
+ 			 </div>
+		</div>
+		
+			<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="myModal2">
+  			<div class="modal-dialog modal-lg">
+  				 <div class="modal-header dktj-modalhader">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title">广告资源</h4>
+			     </div>
+  			 	  <div class="modal-content tktj_nav">
+    			<table class="table tktj-modal  table-hover">
+							      <thead>
+							      
+							        <tr>							       
+							          <th>端口号</th>
+							          <th>开发率</th>
+							        </tr>
+							      </thead>
+							      <tbody>
+							        <tr>
+							         
+							          <td>1</td>
+							          <td>6%</td>
+							        </tr>
+							        <tr>
+							         
+							          <td>2</td>
+							          <td>5%</td>
+							        </tr>
+							        <tr>
+							        
+							          <td>3</td>
+							          <td>25</td>
+							        </tr>
+							    
+							        <tr>
+							         
+							          <td>49</td>
+							          <td>5%</td>
+							        </tr>
+							        <tr>
+							        
+							          <td>50</td>
+							          <td>0%</td>
+							        </tr>
+							      </tbody>
+							    </table>
+							    
+							    <nav class="text-center">
+								  <ul class="pagination text-center tktj-page">
+								    <li class=""><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+								    <li class=""><a href="#">1 <span class="sr-only">(current)</span></a></li>
+								    <li class="active"><a href="#">2 <span class="sr-only">(current)</span></a></li>
+								    <li class=""><a href="#">3 <span class="sr-only">(current)</span></a></li>
+								    <li class=""><a href="#">4<span class="sr-only">(current)</span></a></li>
+								    <li class=""><a href="#">5 <span class="sr-only">(current)</span></a></li>
+								    <li class=""><a href="#" aria-label="Next"><span aria-hidden="true">»</span></a></li>
+								  </ul>
+								</nav>
+  			  </div>
+ 			 </div>
+		</div>
+		
+		
+			<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="myModal3">
+  			<div class="modal-dialog modal-lg">
+  				<div class="modal-header dktj-modalhader">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title">常规资源</h4>
+			     </div>
+  			 	  <div class="modal-content tktj_nav">
+    			<table class="table tktj-modal  table-hover">
+							      <thead>
+							    
+							        <tr>							       
+							          <th>端口号</th>
+							          <th>开发率</th>
+							        </tr>
+							      </thead>
+							      <tbody>
+							        <tr>
+							         
+							          <td>1</td>
+							          <td>6%</td>
+							        </tr>
+							        <tr>
+							         
+							          <td>2</td>
+							          <td>5%</td>
+							        </tr>
+							        <tr>
+							        
+							          <td>3</td>
+							          <td>25</td>
+							        </tr>
+							    
+							        <tr>
+							         
+							          <td>49</td>
+							          <td>5%</td>
+							        </tr>
+							        <tr>
+							        
+							          <td>50</td>
+							          <td>0%</td>
+							        </tr>
+							      </tbody>
+							    </table>
+							    
+							    <nav class="text-center">
+								  <ul class="pagination text-center tktj-page">
+								    <li class=""><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+								    <li class=""><a href="#">1 <span class="sr-only">(current)</span></a></li>
+								    <li class="active"><a href="#">2 <span class="sr-only">(current)</span></a></li>
+								    <li class=""><a href="#">3 <span class="sr-only">(current)</span></a></li>
+								    <li class=""><a href="#">4<span class="sr-only">(current)</span></a></li>
+								    <li class=""><a href="#">5 <span class="sr-only">(current)</span></a></li>
+								    <li class=""><a href="#" aria-label="Next"><span aria-hidden="true">»</span></a></li>
+								  </ul>
+								</nav>
+  			  </div>
+ 			 </div>
+		</div>
+		
+			<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="myModal4">
+  			<div class="modal-dialog modal-lg">
+  				<div class="modal-header dktj-modalhader">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title">微信资源</h4>
+			     </div>
+  			 	  <div class="modal-content tktj_nav">
+    			<table class="table tktj-modal  table-hover">
+							      <thead>
+							      
+							        <tr>							       
+							          <th>端口号</th>
+							          <th>开发率</th>
+							        </tr>
+							      </thead>
+							      <tbody>
+							        <tr>
+							         
+							          <td>1</td>
+							          <td>6%</td>
+							        </tr>
+							        <tr>
+							         
+							          <td>2</td>
+							          <td>5%</td>
+							        </tr>
+							        <tr>
+							        
+							          <td>3</td>
+							          <td>25</td>
+							        </tr>
+							    
+							        <tr>
+							         
+							          <td>49</td>
+							          <td>5%</td>
+							        </tr>
+							        <tr>
+							        
+							          <td>50</td>
+							          <td>0%</td>
+							        </tr>
+							      </tbody>
+							    </table>
+							    
+							    <nav class="text-center">
+								  <ul class="pagination text-center tktj-page">
+								    <li class=""><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+								    <li class=""><a href="#">1 <span class="sr-only">(current)</span></a></li>
+								    <li class="active"><a href="#">2 <span class="sr-only">(current)</span></a></li>
+								    <li class=""><a href="#">3 <span class="sr-only">(current)</span></a></li>
+								    <li class=""><a href="#">4<span class="sr-only">(current)</span></a></li>
+								    <li class=""><a href="#">5 <span class="sr-only">(current)</span></a></li>
+								    <li class=""><a href="#" aria-label="Next"><span aria-hidden="true">»</span></a></li>
+								  </ul>
+								</nav>
+  			  </div>
+ 			 </div>
+		</div>
+		
+		</block>
+		
+		
+		
+
+<block name="scripts">
+	<script type="text/javascript" src="RES{:C('DEFAULT_THEME')}/resources/progressbar/progressbar.min.js"></script>
+	<!--<link rel="stylesheet" href="resources/CLNDR-master/demo/css/clndr.css" />-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+	<script type="text/javascript" src="RES{:C('DEFAULT_THEME')}/resources/CLNDR-master/clndr.min.js"></script>
+	<link rel="stylesheet" href="RES{:C('DEFAULT_THEME')}/resources/datetimepicker/css/bootstrap-datetimepicker.min.css" />
+	<script type="text/javascript" src="RES{:C('DEFAULT_THEME')}/resources/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+	<script type="text/javascript" src="RES{:C('DEFAULT_THEME')}/resources/datetimepicker/js/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script type="text/javascript" src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
+    <script type="text/javascript" src="http://cdn.hcharts.cn/highcharts/exporting.js"></script>
+    <script type="text/javascript" src="RES{:C('DEFAULT_THEME')}/resources/My97DatePicker/WdatePicker.js"></script>
+    <script src="RES{:C('DEFAULT_THEME')}/resources/My97DatePicker/WdatePicker.js"></script>
+	<script>
+		$(document).ready(function() {
+			//加载日历
+			$('.pickdate').datetimepicker({
+				format: 'yyyy-mm-dd',
+				autoclose: true,
+				language: "zh-CN",
+				minView: 2,
+				pickerPosition: "bottom-left"
+			});
+			//团队状态分析(相较于上月)
+			ProgressBarCircle('#divCircle1', 0.72, "#48d8c8", 72);
+			ProgressBarCircle('#divCircle2', 0.98, "#ffc400", "增加22653.25");
+			ProgressBarCircle('#divCircle3', 0.40, "#5ab5ea", 40);
+			ProgressBarCircle('#divCircle4', 0.15, "#9882e5", 15);
+		});
+		$(function() {
+			$('[data-toggle="tooltip"]').tooltip('show');
+		});
+		$('#calendar').clndr({
+			template: $('#clndr-template').html(),
+			daysOfTheWeek: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+			targets: {
+				day: 'day',
+				empty: 'empty',
+				nextButton: 'clndr-next-button',
+				todayButton: 'clndr-today-button',
+				previousButton: 'clndr-previous-button',
+				nextYearButton: 'clndr-next-year-button',
+				previousYearButton: 'clndr-previous-year-button',
+			},
+			classes: {
+				today: "today",
+				adjacentMonth: "disabled",
+			},
+		});
+
+		function createNew(day) {
+			console.log(day);
+			$("#DayModal").modal("show");
+		}
+
+		function closeSysbox() {
+			$("#sys").remove();
+		}
+	</script>
+
+
+<script>
+$(document).ready(function(){
+  $('input').iCheck({
+    checkboxClass: 'icheckbox_minimal',
+    radioClass: 'iradio_minimal',
+    increaseArea: '20%' // optional
+  });
+});
+</script>
+
+
+
+<script>
+	//团队折线图
+	$(function () {
+    $('#container1').highcharts({
+        chart: {
+            type: 'line'
+        },
+        title: {
+            text: '开发率'
+        },
+         credits: {
+   		 enabled: false
+		},
+        subtitle: {
+            text: '本数据由技术部提供，如有异议请保留！'
+        },
+        xAxis: {
+            categories: [{$data1},{$data4}]
+        },
+        yAxis: {
+            title: {
+                text: '百分比(%)'
+            }
+        },
+        tooltip: {
+            enabled: false,
+            formatter: function() {
+                return '<b>'+ this.series.name +'</b><br/>'+this.x +': '+ this.y +'°C';
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: false
+            }
+        },
+        series: [{
+            name: '时间1',
+            data: [{$data2}]
+        }, {
+            name: '时间2',
+            data: [{$data2}]
+        }]
+    });
+});				
+</script>
+
+
+
+
+
+</block>

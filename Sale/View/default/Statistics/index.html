@@ -1,0 +1,189 @@
+<extend name="./App/Common/View/default/base.html"/>
+
+<block name="title">
+团队每日销售-报表统计-销售管理-
+</block>
+
+<block name="css">
+
+</block>
+
+<block name="breadcrumb">
+<div class="row _breadcrumb">
+    <div class="col-xs-12">
+        <ol class="breadcrumb">
+            报表统计
+        </ol>
+
+        <ul class="breadcrumb">
+            <li><i class="fa fa-home"></i>首页</li>
+            <li><a>销售管理</a></li>
+            <li class="active"><a>报表统计</a></li>
+        </ul>
+    </div>
+</div>
+</block>
+
+<block name="content">
+<div class="row wow fadeIn" data-wow-delay="10ms">
+	<div class="col-md-4 col-lg-4">
+		<div class="panel panel-mask">
+			<img src="RES{:C('DEFAULT_THEME')}/img/object-1-720x480.jpg" alt="" class="img-responsive">
+			<div class="panel-body">
+				<?php
+		            if ($auth->check('Sale/Sale/index', session('empId')) || session('empId') == C('CFG_MANAGER_ID')):
+				?>
+				<a href="{:U('Sale/index')}">公司月销售</a>
+				<?php 
+					else:
+						echo '<a href="#">暂无项目</a>';
+					endif; 
+				?>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4 col-lg-4">
+		<div class="panel panel-mask">
+			<img src="RES{:C('DEFAULT_THEME')}/img/total07.jpg" alt="" class="img-responsive">
+			<div class="panel-body">
+				<?php
+		            if ($auth->check('Sale/TeamSale/day', session('empId')) || session('empId') == C('CFG_MANAGER_ID')):
+				?>
+				<a href="{:U('TeamSale/day')}">团队每日销售</a>
+				<?php 
+					else:
+						echo '<a href="#">暂无项目</a>';
+					endif; 
+				?>
+				
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4 col-lg-4">
+		<div class="panel panel-mask">
+			<img src="RES{:C('DEFAULT_THEME')}/img/total06.jpg" alt="" class="img-responsive">
+			<div class="panel-body">
+				<?php
+		            if ($auth->check('Sale/TeamSale/month', session('empId')) || session('empId') == C('CFG_MANAGER_ID')):
+				?>
+				<a href="{:U('TeamSale/month')}">团队每月销售</a>
+				<?php 
+					else:
+						echo '<a href="#">暂无项目</a>';
+					endif; 
+				?>
+				
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row wow fadeIn">
+	
+	<div class="col-md-4 col-lg-4">
+		<div class="panel panel-mask">
+			<img src="RES{:C('DEFAULT_THEME')}/img/total03.jpg" alt="" class="img-responsive">
+			<div class="panel-body">
+				<?php
+		            if ($auth->check('Sale/Excel/monthSheet', session('empId')) || session('empId') == C('CFG_MANAGER_ID')):
+				?>
+				<a href="{:U('Excel/monthSheet')}">月销售报表</a>
+				<?php 
+					else:
+						echo '<a href="#">暂无项目</a>';
+					endif; 
+				?>
+				
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4 col-lg-4">
+		<div class="panel panel-mask">
+			<img src="RES{:C('DEFAULT_THEME')}/img/total04.jpg" alt="" class="img-responsive">
+			<div class="panel-body">
+				<?php
+		            if ($auth->check('Sale/Excel/prizeSheet', session('empId')) || session('empId') == C('CFG_MANAGER_ID')):
+				?>
+				<a href="{:U('Excel/prizeSheet')}">提成表</a>
+				<?php 
+					else:
+						echo '<a href="#">暂无项目</a>';
+					endif; 
+				?>
+				
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4 col-lg-4">
+		<div class="panel panel-mask">
+			<img src="RES{:C('DEFAULT_THEME')}/img/total05.jpg" alt="" class="img-responsive">
+			<div class="panel-body">
+				<?php
+		            if ($auth->check('Sale/Excel/lineSheet', session('empId')) || session('empId') == C('CFG_MANAGER_ID')):
+				?>
+				<a href="{:U('Excel/lineSheet')}">常规TPS资源（财务）</a>
+				<?php 
+					else:
+						echo '<a href="#">暂无项目</a>';
+					endif; 
+				?>
+				
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row wow fadeIn">
+	
+	<div class="col-md-4 col-lg-4">
+		<div class="panel panel-mask">
+			<img src="RES{:C('DEFAULT_THEME')}/img/total01.jpg" alt="" class="img-responsive">
+			<div class="panel-body">
+				<?php
+		            if ($auth->check('Sale/Excel/lineDetail', session('empId')) || session('empId') == C('CFG_MANAGER_ID')):
+				?>
+				<a href="{:U('Excel/lineDetail')}">常规TPS明细（总监）</a>
+				<?php 
+					else:
+						echo '<a href="#">暂无项目</a>';
+					endif; 
+				?>
+				
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4 col-lg-4">
+		<div class="panel panel-mask">
+			<img src="RES{:C('DEFAULT_THEME')}/img/total06.jpg" alt="" class="img-responsive">
+			<div class="panel-body">
+				<?php
+		            if ($auth->check('Sale/Statistics/teamDetail', session('empId')) || session('empId') == C('CFG_MANAGER_ID')):
+				?>
+				<a href="{:U('Sale/Statistics/teamDetail')}">销售图形统计</a>
+				<?php 
+					else:
+						echo '<a href="#">暂无项目</a>';
+					endif; 
+				?>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4 col-lg-4">
+		<div class="panel panel-mask">
+			<img src="RES{:C('DEFAULT_THEME')}/img/total02.jpg" alt="" class="img-responsive">
+			<div class="panel-body">
+				<a href="#">暂无项目</a>
+			</div>
+		</div>
+	</div>
+</div>
+</block>
+
+<block name="scripts">
+<script type="text/javascript" src="RES{:C('DEFAULT_THEME')}/js/wow.min.js"></script>
+<script>
+	wow = new WOW({
+		mobile: true, // default
+		live: true // default
+	})
+	new WOW().init();
+</script>
+</block>

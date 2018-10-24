@@ -1,0 +1,39 @@
+<notempty name="teamList">
+<table class="table table-bordered table-striped _sale">
+	<caption>
+		团队销售信息 <!-- <a href="#"><i class="fa fa-angle-right"></i></a><a href="#"><i class="fa fa-angle-left"></i></a> -->
+	</caption>
+	<thead>
+		<volist name="teamList" id="v" offset="0" length="1">
+		<tr class="_first">
+			<td colspan="3">
+				<a href=""><img src="RES{:C('DEFAULT_THEME')}/img/Ailee.jpg" width="49" height="49" /></a>
+				<div>
+					<h4>{$v.teamName}<small>第1名</small></h4>
+					<p>考核了{$v.empNum}人<span>共{$v.orderNum}单</span></p>
+				</div>
+			</td>
+			<td colspan="2">
+				<p class="_totalname">总销售额</p>
+				<p class="_totalmoney">￥{$v.orderPrice}</p>
+			</td>
+		</tr>
+		</volist>
+	</thead>
+	<tbody>
+		<volist name="teamList" id="v" offset="1">
+		<tr>
+			<td>
+				<a href="javascript:;"><img src="{$v.pic}" width="20" height="20" /></a>
+			</td>
+			<td>
+				{$v.teamName}<small>{$v.teamLeader} <i class="fa fa-user"></i> {$v.teamManager}</small>
+			</td>
+			<td><span>￥{$v.orderPrice|default='0.0'}</span></td>
+			<td>单数 {$v.orderNum|default='0'}</td>
+			<td>考核人数 {$v.empNum}</td>
+		</tr>
+		</volist>
+	</tbody>
+</table>
+</notempty>

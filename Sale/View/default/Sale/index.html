@@ -1,0 +1,204 @@
+<extend name="./App/Common/View/default/base.html"/>
+
+<block name="title">
+公司月销售-报表统计-销售管理-
+</block>
+
+<block name="menu">
+    {:W('Common/Cat/menu',array('Sale/Statistics/index'))}
+</block>
+
+<block name="css">
+ <link rel="stylesheet" href="RES{:C('DEFAULT_THEME')}/resources/datetimepicker/css/bootstrap-datetimepicker.min.css" />
+</block>
+
+<block name="breadcrumb">
+<div class="row _breadcrumb">
+	<div class="col-xs-12">
+		<ol class="breadcrumb">
+			<li class="active">公司月销售<span>{$currentMonth}</span></li>
+		</ol>
+
+		<ul class="breadcrumb">
+			<li><i class="fa fa-home"></i>首页</li>
+			<li><a>报表统计</a></li>
+			<li class="active"><a>公司月销售</a></li>
+		</ul>
+	</div>
+</div>
+</block>
+
+<block name="content">
+<h1 class="_tj-title">销售信息记录<span>最后更新时间：{$lastUpdate|date='Y-m-d H:i:s',###}</span></h1>
+<div class="row _tjs">
+	<div class="col-xs-12 col-md-6 col-lg-3 _tj-item-1">
+		<div class="_tj-item">
+			<h4>安徽分公司 <!-- <a href="#"><i class="fa fa-refresh"></i></a> --> </h4>
+			<ul>
+				<li>
+					<p>总销售单</p>
+					<p>{$companyOrderNum|default='0'}</p>
+				</li>
+				<li>
+					<p>总销售金额</p>
+					<p>{$companyOrderPrice|number_format=###,2}</p>
+				</li>
+			</ul>
+			<!-- <div class="progress">
+				<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+					<span class="sr-only">40% Complete (success)</span>
+				</div>
+			</div>
+			<p><span>高出4%</span>相对于上个月同期增长比</p> -->
+		</div>
+	</div>
+	<div class="col-xs-12 col-md-6 col-lg-3 _tj-item-2">
+		<div class="_tj-item">
+			<h4>营运中心 <!-- <a href="#"><i class="fa fa-refresh"></i></a> --> </h4>
+			<ul>
+				<li>
+					<p>总销售单</p>
+					<p>{$hzOrderNum|default="0"}</p>
+				</li>
+				<li>
+					<p>总销售金额</p>
+					<p>{$hzOrderPrice|number_format=###,2}</p>
+				</li>
+			</ul>
+			<!-- <div class="progress">
+				<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+					<span class="sr-only">40% Complete (success)</span>
+				</div>
+			</div>
+			<p><span>高出4%</span>相对于上个月同期增长比</p> -->
+		</div>
+	</div>
+	<div class="col-xs-12 col-md-6 col-lg-3 _tj-item-3">
+		<div class="_tj-item">
+			<h4>服务拓展中心 <!-- <a href="#"><i class="fa fa-refresh"></i></a> --> </h4>
+			<ul>
+				<li>
+					<p>总销售单</p>
+					<p>{$ahOrderNum|default="0"}</p>
+				</li>
+				<li>
+					<p>总销售金额</p>
+					<p>{$ahOrderPrice|number_format=###,2}</p>
+				</li>
+			</ul>
+			<!-- <div class="progress">
+				<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+					<span class="sr-only">40% Complete (success)</span>
+				</div>
+			</div>
+			<p><span>高出4%</span>相对于上个月同期增长比</p> -->
+		</div>
+	</div>
+	<div class="col-xs-12 col-md-6 col-lg-3 _tj-item-4">
+		<div class="_tj-item">
+			<h4>网络事业中心 <a href="#"><i class="fa fa-refresh"></i></a> </h4>
+			<ul>
+				<li>
+					<p>总销售单</p>
+					<p>{$wxOrderNum|default="0"}</p>
+				</li>
+				<li>
+					<p>总销售金额</p>
+					<p>{$wxOrderPrice|number_format=###,2}</p>
+				</li>
+			</ul>
+			<!-- <div class="progress">
+				<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+					<span class="sr-only">40% Complete (success)</span>
+				</div>
+			</div> -->
+			<!-- <p><span>高出4%</span>相对于上个月同期增长比</p> -->
+		</div>
+	</div>
+</div>
+
+<!--销售表格 开始-->
+<div class="row _sales">
+	<div class="col-xs-12 col-lg-12 _sales-item-1" id="team">
+		<h3><i class="fa fa-circle-o-notch fa-spin"></i></h3>
+	</div>
+	<div class="col-xs-12 col-lg-4 _sales-item-2" id="pull">
+		<i class="fa fa-spinner fa-spin"></i>
+	</div>
+	
+	<div class="col-xs-12 col-lg-4 _sales-item-3" id="anhui">
+		<i class="fa fa-spinner fa-spin"></i>
+	</div>
+
+	<div class="col-xs-12 col-lg-4 _sales-item-4" id="central">
+		<i class="fa fa-spinner fa-spin"></i>
+	</div>
+
+	<!-- <div class="col-xs-12 col-lg-3 _sales-item-1" id="weixin">
+		<i class="fa fa-spinner fa-spin"></i>
+	</div> -->
+
+</div>
+</block>
+
+<block name="modal">
+</block>
+
+<block name="scripts">
+<script type="text/javascript" src="RES{:C('DEFAULT_THEME')}/resources/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="RES{:C('DEFAULT_THEME')}/resources/datetimepicker/js/bootstrap-datetimepicker.zh-CN.js"></script>
+
+<script>
+$(document).ready(function() {
+	//加载日历
+	$('#txtDate').datetimepicker({
+		format: 'yyyy-mm',
+		autoclose: true,
+		language: "zh-CN",
+		startView:3,
+		minView: 3,
+		maxView:3,
+		pickerPosition: "bottom-left"
+	});
+});
+
+$(function(){
+	setTimeout(function(){
+		$.ajax({
+			url:'{:U("team")}',
+			success:function(res){
+				$('#team').html(res);
+			}
+		});
+
+		$.ajax({
+			url:'{:U("pull")}',
+			success:function(res){
+				$('#pull').html(res);
+			}
+		});
+
+		$.ajax({
+			url:'{:U("anhui")}',
+			success:function(res){
+				$('#anhui').html(res);
+			}
+		});
+
+		$.ajax({
+			url:'{:U("central")}',
+			success:function(res){
+				$('#central').html(res);
+			}
+		});
+
+		// $.ajax({
+		// 	url:'{:U("weixin")}',
+		// 	success:function(res){
+		// 		$('#weixin').html(res);
+		// 	}
+		// });
+	},1000);
+});
+</script>
+</block>

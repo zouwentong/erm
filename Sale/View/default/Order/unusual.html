@@ -1,0 +1,357 @@
+<extend name="./App/Common/View/default/base.html"/>
+
+<block name="title">
+订单列表-销售管理-
+</block>
+
+<block name="css">
+ <link href="RES{:C('DEFAULT_THEME')}/resources/datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+ <link href="RES{:C('DEFAULT_THEME')}/resources/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet">
+ <link href="RES{:C('DEFAULT_THEME')}/resources/jQuery-Validation-Engine/css/validationEngine.jquery.css" rel="stylesheet">
+</block>
+
+<block name="breadcrumb">
+<div class="row _breadcrumb">
+    <div class="col-xs-12">
+        <ol class="breadcrumb">
+            异常订单 
+            <!-- <li class="_msg">不搞科学技术，生产力无法提高。《毛泽东》</li> -->
+        </ol>
+
+        <ul class="breadcrumb">
+            <li><i class="fa fa-home"></i>首页</li>
+            <li><a>销售管理</a></li>
+            <li class="active"><a>异常订单</a></li>
+        </ul>
+    </div>
+</div>
+</block>
+
+<block name="content">
+
+
+<div class="_contain">
+	<div class="_title-left">
+		<strong>异常订单</strong>
+		<ul class="nav nav-tabs _tab-right" role="tablist">
+
+			<li role="presentation" <eq name="type" value="2">class="active"</eq>><a href="{:U('Order/unusual',array('type'=>2))}">来源未知</a></li>
+
+			<li role="presentation"  <eq name="type" value="1">class="active"</eq> ><a href="{:U('Order/unusual',array('type'=>1))}">普通异常</a></li>
+
+			<li role="presentation"  <eq name="type" value="4">class="active"</eq> ><a href="{:U('Order/unusual',array('type'=>4))}">多qq群申请客户</a></li>
+
+		</ul>
+	</div>
+
+	<!--微信用户列表  开始-->
+	<div class="tab-content">
+		<div role="tabpanel" class="tab-pane active" id="tab1">
+
+<div class="order_list">
+	<div class="panel">
+		<div class="panel-heading">
+			<!-- <a href="#" class="panel-right btn btn-default btn-xs">导出</a> -->
+			<!-- <h3 class="panel-title">订单列表</h3> -->
+		</div>
+		<div class="panel-body">
+			<div class="table-responsive">
+				<table class="table table-ustriped table-bordered table-hover cy-table">
+					<thead>
+						<tr>
+							<th>来源</th>
+							<th>客户姓名</th>
+							<th>客户QQ</th>
+							<th>销售人员</th>
+							<th>产品</th>
+							<th class="text-left">订单编号</th>
+							<th>金额</th>
+							<th>用户编号</th>
+							<th>日期</th>
+							<th>新增</th>
+							<th class="text-left">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<volist name="lists" id="v" empty="$empty">
+						<tr>
+							<td><a class="detail"><i class="fa fa-plus-circle"></i></a> {$v.sourceName}</td>
+							<td>{$v.name}</td>
+							<td>{$v.qq}</td>
+							<td>{$v.empName}</td>
+							<td>{$v.productName}</td>
+							<td class="text-left" title="{$v['orderNo']}">{:substr($v['orderNo'],0,20)}...</td>
+							<td>{$v.price}</td>
+							<td>{$v.emNum}</td>
+							<td>{$v.collectDate}</td>
+							<td>
+								<switch name="v.isNew">
+								<case value="1"></case>
+								<case value="2">否</case>
+								<case value="3">是-半单</case>
+								<case value="4">否-半单</case>
+								</switch>
+							</td>
+							<td class="text-left col-xs-2">
+								<?php
+						            if ($auth->check('Sale/Order/edit', session('empId')) || session('empId') == C('CFG_MANAGER_ID')):
+								?>
+								<a href="javascript:;" class="btn btn-gray btn-xs  edit-btn" val="{$v.id}"><i class="fa fa-edit" ></i> 编辑</a>
+								<?php endif; ?>
+								
+								<in name="v.isCheck" value="2,4">
+								<notempty name="v.unusualReason">
+								<p class="text-danger"><a style="color:red;" class="lookQq" href="javascript:;" val="{$v.customerId}">异常理由:{$v.unusualReason}</a></p>
+								</notempty>
+
+								<notempty name="v.chatSource">
+								附加信息:进群时间({$v.joinTime|date='Y-m-d',###}) <a href="{:U('mht',['id'=>$v['orderUnusualId']])}" target="_blank" style="color:red;">相关证明下载</a><br>
+								</notempty>
+			
+
+								<?php
+						            if ($auth->check('Sale/Order/pass', session('empId')) || session('empId') == C('CFG_MANAGER_ID')):
+								?>
+								<a href="javascript:;" class="btn btn-gray btn-xs  pass-btn" val="{$v.id}"><i class="fa fa-check" ></i> 通过</a>
+								<?php endif; ?>
+
+								<?php
+						            if ($auth->check('Sale/Order/unpass', session('empId')) || session('empId') == C('CFG_MANAGER_ID')):
+								?>
+							 	<a href="javascript:;" class="btn btn-gray btn-xs  unpass-btn" val="{$v.id}"><i class="fa fa-times" ></i> 不通过</a> 
+								<?php endif; ?>
+								
+								</in>
+
+								<eq name="Think.get.type" value="4">
+								<a style="color:red;" class="btn btn-xs btn-gray lookQq" href="javascript:;" val="{$v.customerId}">查看qq群</a>
+								</eq>
+
+							</td>
+						</tr>
+						<tr class="collapse active exc-detail">
+							<td class="tb-details" colspan="10">
+								<table cellpadding="5">
+									<tbody>
+										<tr>
+											<th>讲师：</th>
+											<td>{$v.teacher|default='-'}</td>
+										</tr>
+										<tr>
+											<th>订单状态：</th>
+											<td>{$v.status|default='-'}</td>
+										</tr>
+										<tr>
+											<th>订单备注：</th>
+											<td>{$v.beizhu|default='-'}</td>
+										</tr>
+										<tr>
+											<th>客户地址：</th>
+											<td>{$v.address}</td>
+										</tr>
+									</tbody>
+								</table>
+							</td>
+						</tr>
+						</volist>
+					</tbody>
+				</table>
+			</div>
+			<nav class="list-pager text-right">
+				<div class="cs-pager">
+				{$page}
+				</div>
+			</nav>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+
+</div>
+
+<div class="modal fade _modal" id="lookQq">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><img src="RES{:C('DEFAULT_THEME')}/img/icon/modal_colse.png" /></button>
+				<h4 class="modal-title">该客户qq群</h4>
+			</div>
+			<form class="form-horizontal hori-borderd" id="callForm">
+
+			<div class="modal-body">
+				<!--完善信息  开始-->
+
+				<!--完善信息  结束-->
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">确定</button>
+			</div>
+
+			</form>
+		</div>
+	</div>
+</div>
+</block>
+
+<block name="scripts">
+<script src="RES{:C('DEFAULT_THEME')}/resources/bootstrap-select/js/bootstrap-select.min.js"></script>
+<script src="RES{:C('DEFAULT_THEME')}/resources/bootstrap-select/js/i18n/defaults-zh_CN.js"></script>
+<link rel="stylesheet" href="RES{:C('DEFAULT_THEME')}/resources/icheck-1.x/skins/all.css" />
+<script src="RES{:C('DEFAULT_THEME')}/resources/icheck-1.x/icheck.min.js"></script>
+<script src="RES{:C('DEFAULT_THEME')}/resources/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="RES{:C('DEFAULT_THEME')}/resources/datetimepicker/js/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="RES{:C('DEFAULT_THEME')}/js/base.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		//加载日历
+		$('.datepicker').datetimepicker({
+			format: 'yyyy-mm-dd',
+			autoclose: true,
+			language: "zh-CN",
+			minView: 2,
+			pickerPosition: "bottom-left"
+		});
+	});
+	$('input').iCheck({
+		checkboxClass: 'icheckbox_minimal',
+		radioClass: 'iradio_minimal',
+		increaseArea: '20%' // optional
+	});
+	$('.selectpicker').selectpicker();
+</script>
+
+<script type="text/javascript">
+	$('.detail').click(function(){
+		if($(this).find('i').hasClass('fa-plus-circle')){
+			$(this).find('i').removeClass('fa-plus-circle').addClass('fa-minus-circle');
+		}else{
+			$(this).find('i').removeClass('fa-minus-circle').addClass('fa-plus-circle');
+		}
+		$(this).parents("tr").next().toggle(800);
+	});
+</script>
+
+<script type="text/javascript">
+	var addUrl='{:U("add")}';
+	var editUrl='{:U("edit")}';
+	var delUrl='{:U("delete")}';
+	var type=1;
+</script>
+<script src="RES{:C('DEFAULT_THEME')}/resources/jQuery-Validation-Engine/js/jquery.validationEngine-zh_CN.js"></script>
+<script src="RES{:C('DEFAULT_THEME')}/resources/jQuery-Validation-Engine/js/jquery.validationEngine.min.js"></script>
+<script src="RES{:C('DEFAULT_THEME')}/js/form.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#myForm").submit(function(){
+		if( jQuery('#myForm').validationEngine('validate')){
+			if(type==1){
+				ajaxForm.store($('#myForm').attr("action"),$('#myForm').serialize(),function(res){
+					// 自定义更新表格数据
+					window.location.href=window.location.href;
+				});
+			}else{
+				ajaxForm.update($('#myForm').attr("action"),$('#myForm').serialize(),function(res){
+					window.location.href=window.location.href;
+				});
+			}
+		}
+		return false;
+	});
+
+	$("table,ul").on("click",'.unpass-btn',function(){
+		var _this=$(this);
+		layer.confirm('确定不通过吗？', {icon: 3, title:'提示'}, function(index) {
+			$.ajax({
+				type:"POST",
+				url:'{:U("unpass")}',
+				dataType:"json",
+				data:{
+					orderId:_this.attr("val")
+				},
+				beforeSend:function(){
+					this.loading = layer.load(2, {
+						shade: [0.1, '#000']
+					});
+				},
+				success:function(res){
+					layer.close(this.loading);
+					
+					if(res.error==0){
+						layer.msg('操作成功', {
+							icon: 1
+						});
+						_this.parents("tr").remove();
+					}else if(res.error==1){
+						layer.msg('操作失败，请稍后再试', {
+							icon: 2,
+							time:2000
+						});
+					}
+					layer.close(index);
+				}
+			});
+		});
+	});
+
+	$("table").on("click",'.pass-btn',function(){
+		var _this=$(this);
+		layer.confirm('确定要通过吗？', {icon: 3, title:'提示'}, function(index) {
+			$.ajax({
+				type:"POST",
+				url:'{:U("pass")}',
+				dataType:"json",
+				data:{
+					orderId:_this.attr("val")
+				},
+				beforeSend:function(){
+					this.loading = layer.load(2, {
+						shade: [0.1, '#000']
+					});
+				},
+				success:function(res){
+					layer.close(this.loading);
+					
+					if(res.error==0){
+						layer.msg('操作成功', {
+							icon: 1
+						});
+						_this.parents("tr").remove();
+					}else if(res.error==1){
+						layer.msg('操作失败，请稍后再试', {
+							icon: 2,
+							time:2000
+						});
+					}
+					layer.close(index);
+				}
+			});
+		});
+	});
+});
+
+$('.lookQq').click(function(){
+	var loading=null;
+	var customerId=$(this).attr('val');
+	$.ajax({
+		type:"POST",
+		dataType:'html',
+		url:"{:U('unusual',['type'=>3])}",
+		data:{
+			customerId:customerId
+		},
+		beforeSend:function(){
+			loading=layer.load();
+		},
+		success:function(res){
+			layer.close(loading);
+			$('#lookQq .modal-body').html(res);
+			$('#lookQq').modal('show');
+		}
+	});
+});
+
+
+</script>
+</block>

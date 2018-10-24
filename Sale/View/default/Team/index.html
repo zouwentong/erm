@@ -1,0 +1,334 @@
+<extend name="./App/Common/View/default/base.html"/>
+
+<block name="css">
+ <link href="RES{:C('DEFAULT_THEME')}/resources/jQuery-Validation-Engine/css/validationEngine.jquery.css" rel="stylesheet">
+ <link rel="stylesheet" type="text/css" href="RES{:C('DEFAULT_THEME')}/resources/uploadify/uploadify.css">
+</block>
+
+<block name="breadcrumb">
+<div class="row _breadcrumb">
+    <div class="col-xs-12">
+        <ol class="breadcrumb">
+            团队管理 <?php if ($auth->check('Sale/Team/add', session('empId')) || session('empId') == C('CFG_MANAGER_ID')):?><a href="#" class="btn btn-xs btn-odadd add-btn">添加团队</a> <?php endif; ?>
+        </ol>
+
+        <ul class="breadcrumb">
+            <li><i class="fa fa-home"></i>首页</li>
+            <li><a>销售管理</a></li>
+            <li class="active"><a>团队管理</a></li>
+        </ul>
+    </div>
+</div>
+</block>
+
+<block name="content">
+<div class="order_list">
+	<div class="panel">
+		<div class="panel-body">
+			<form class="form-inline" action="__ACTION__" method="GET">
+				<div class="form-group form-group-sm">
+					<label for="name">团队</label>
+					<input type="text" class="form-control" id="name" name="teamName" placeholder="" value="{$Think.get.teamName}">
+				</div>
+				<!-- <div class="form-group form-group-sm">
+					<label for="exampleInputName2">产品名称</label>
+					<select class="selectpicker" data-size="5" data-style="btn-cy btn-sm">
+						<option>请选择…</option>
+						<option>Ketchup</option>
+						<option>Relish</option>
+					</select>
+				</div> -->
+				<button type="submit" class="btn btn-cy-search btn-sm">搜索</button>
+			</form>
+		</div>
+	</div>
+	<div class="panel">
+		<div class="panel-heading">
+			<h3 class="panel-title">团队列表</h3>
+		</div>
+		<div class="panel-body">
+			<div class="table-responsive">
+				<table class="table table-striped table-bordered table-hover cy-table">
+					<thead>
+						<tr>
+							<th class="text-left">团队名称</th>
+							<th>团队描述</th>
+							<th>主管</th>
+							<th>经理</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<volist name="lists" id="v" empty="$empty">
+						<tr>
+							<td>{$v.teamName}</td>
+							<td>
+								{$v.teamDesc}
+							</td>
+							<td>{$v.leader}</td>
+							<td>{$v.manager}</td>
+							<td class="col-xs-2">
+								<?php
+						            if ($auth->check('Sale/Team/edit', session('empId')) || session('empId') == C('CFG_MANAGER_ID')):
+								?>
+								<a href="javascript:;" class="btn btn-gray btn-xs edit-btn" val="{$v.id}"><i class="fa fa-edit"></i> 编辑</a>
+								<?php endif; ?>
+								<?php
+						            if ($auth->check('Sale/Team/delete', session('empId')) || session('empId') == C('CFG_MANAGER_ID')):
+								?>
+								<a href="javascript:;" class="btn btn-gray btn-xs remove-btn" val="{$v.id}"><i class="fa fa-times"></i> 删除</a>
+								<?php endif; ?>
+								<?php
+						            if ($auth->check('Sale/Team/addTeamMember', session('empId')) || session('empId') == C('CFG_MANAGER_ID')):
+								?>
+								<a href="javascript:;" class="btn btn-gray btn-xs allotted-btn" val="{$v.id}"><i class="fa fa-plus"></i> 分配</a>
+								<?php endif; ?>
+							</td>
+						</tr>
+						</volist>
+					</tbody>
+				</table>
+			</div>
+			<nav class="list-pager text-right">
+				<ul class="inline-block pull-left">
+					<!-- <button class="btn btn-sm btn-info">全选</button> -->
+				</ul>
+				<div class="cs-pager">
+				{$page}
+				</div>
+			</nav>
+			</div>
+		</div>
+	</div>
+
+	</div>
+	</div>
+</div>
+<!--右侧内容  结束-->
+<!-- Modal -->
+<div class="modal fade _modal" id="allotted" tabindex="-1" role="dialog" aria-labelledby="allotted">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel">团队成员分配</h4>
+			</div>
+			<div class="modal-body">
+				<div class="input-group">
+					<input type="text" class="form-control" name="k" placeholder="请输入员工姓名或工号">
+					<span class="input-group-btn">
+						<button class="btn btn-default emp-search" type="button">搜索</button>
+					</span>
+				</div>
+				<!-- /input-group -->
+				<div class="row _calendar-month">
+					<div class="col-xs-12">
+						<div class="panel panel-default">
+						  <div class="panel-body" id="search">
+						  	<span>请搜索</span>
+						  </div>
+						</div>
+					</div>
+					<div class="col-xs-12">
+						<div class="panel panel-default">
+						  <div class="panel-body" id="teamMember">
+						  	<span>暂无成员</span>
+						  </div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">确定</button>
+				<!-- <button type="button" class="btn _btn-submit">提交</button> -->
+			</div>
+		</div>
+	</div>
+</div>
+</block>
+
+<block name="scripts">
+
+<script type="text/javascript" src="RES{:C('DEFAULT_THEME')}/resources/uploadify/jquery.uploadify.min.js"></script>
+
+<script type="text/javascript">
+	var addUrl='{:U("add")}';
+	var editUrl='{:U("edit")}';
+	var delUrl='{:U("delete")}';
+	var type=1;
+</script>
+<script src="RES{:C('DEFAULT_THEME')}/resources/jQuery-Validation-Engine/js/jquery.validationEngine-zh_CN.js"></script>
+<script src="RES{:C('DEFAULT_THEME')}/resources/jQuery-Validation-Engine/js/jquery.validationEngine.min.js"></script>
+<script src="RES{:C('DEFAULT_THEME')}/js/form.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#myForm").submit(function(){
+		if( jQuery('#myForm').validationEngine('validate')){
+			if(type==1){
+				ajaxForm.store($('#myForm').attr("action"),$('#myForm').serialize(),function(res){
+					// 自定义更新表格数据
+					// var str='<tr><td>'+res.teamName+'</td><td>'+res.teamDesc+'</td><td>'+res.teamLeader+'</td><td>'+res.teamManager+'</td><td class="col-xs-1"><a href="javascript:;" class="btn btn-gray btn-xs edit-btn" val="'+res.id+'"><i class="fa fa-edit"></i> 编辑</a><a href="javascript:;" class="btn btn-gray btn-xs remove-btn" val="'+res.id+'"><i class="fa fa-times"></i> 删除</a></td></tr>';
+					// $('table').prepend(str);
+					// if($('table tr').length>15){
+					// 	$('table tr:last').remove();
+					// }
+					// var num=parseInt($('span.rows').html().match(/\d+/g));
+					// $('span.rows').html("共 "+(num+1)+" 条记录");
+					location.reload();
+				});
+			}else{
+				ajaxForm.update($('#myForm').attr("action"),$('#myForm').serialize(),function(res){
+					// var str='<td>'+res.teamName+'</td><td>'+res.teamDesc+'</td><td>'+res.teamLeader+'</td><td>'+res.teamManager+'</td><td class="col-xs-1"><a href="javascript:;" class="btn btn-gray btn-xs edit-btn" val="'+res.id+'"><i class="fa fa-edit"></i> 编辑</a><a href="javascript:;" class="btn btn-gray btn-xs remove-btn" val="'+res.id+'"><i class="fa fa-times"></i> 删除</a></td>';
+					// $('a[val='+res.id+']').parents("tr").html(str);
+					location.reload();
+				});
+			}
+		}
+		return false;
+	});
+
+	$("table,ul").on("click",'.remove-btn',function(){
+		var item=$(this);
+		ajaxForm.delete(delUrl,$(this),function(){
+			var num=parseInt($('span.rows').html().match(/\d+/g));
+			$('span.rows').html("共 "+(num-1)+" 条记录");
+			item.parents("tr").remove();
+		});
+	});
+	var teamId=null;
+	$('.allotted-btn').click(function(){
+		teamId=$(this).attr('val');
+		var loading=null;
+		$.ajax({
+			type:"POST",
+			dataType:"json",
+			url:"{:U('getTeamMember')}",
+			data:{
+				teamId:teamId
+			},
+			beforeSend:function(){
+				loading=layer.load();
+			},
+			success:function(res){
+				layer.close(loading);
+				if(res.error==0){
+					var str='';
+					$(res.data).each(function(k,v){
+						if(v.isPost==1){
+							if(v.status==1){
+								str+='<a href="javascript:;" class="btn btn-xs btn-danger" style="width:70px;margin:5px;" >'+v.empName+'</a>';
+							}else{
+								str+='<a href="javascript:;" class="btn btn-xs btn-danger" style="width:70px;margin:5px;background:gray;" >'+v.empName+'('+'离职'+')'+'</a>';
+							}
+
+					}else{
+								str+='<a href="javascript:;" class="btn btn-xs btn-orgne" style="width:70px;margin:5px;background:yellow;" >'+v.empName+'('+'调岗'+')'+'</a>';
+					}
+					});
+					$('#teamMember').html(str);
+				}else if(res.error==-1){
+					$('#teamMember').html('<span>暂无成员</span>');
+				}
+				$('#allotted').modal('show');
+			}
+		});
+	});
+
+	$('#allotted').on('click','.remove-member',function(){
+		var empId=$(this).attr('val');
+		var _this=$(this);
+		var loading=null;
+		$.ajax({
+			type:"POST",
+			dataType:"json",
+			url:"{:U('delTeamMember')}",
+			data:{
+				empId:empId
+			},
+			beforeSend:function(){
+				loading=layer.load();
+			},
+			success:function(res){
+				layer.close(loading);
+				if(res.error==0){
+					_this.parent().remove();
+				}else if(res.error==-1){
+					layer.msg('删除失败，请稍后再试');
+				}
+			}
+		});
+	});
+
+	$('.emp-search').click(function(){
+		var k=$('input[name=k]').val();
+		if(k==''){
+			layer.msg('请输入搜索内容');
+			return false;
+		}
+		var loading=null;
+		$.ajax({
+			type:"POST",
+			dataType:"json",
+			url:"{:U('searchEmp')}",
+			data:{
+				k:k
+			},
+			beforeSend:function(){
+				loading=layer.load();
+			},
+			success:function(res){
+				layer.close(loading);
+				if(res.error==0){
+					$('input[name=k]').val('');
+					var str='';
+					$(res.data).each(function(k,v){
+						str+='<a href="javascript:;" class="btn btn-xs btn-primary" style="width:70px;margin:5px;" >'+v.empName+' <i val="'+v.id+'" class="fa fa-plus pull-right add-member" style="margin-top:3px"></i></a>';
+					});
+					$('#search').find('span').remove();
+					$('#search').html(str);
+				}else if(res.error==-1){
+					$('#search').html('<span>没有匹配员工</span>');
+				}
+			}
+		});
+	});
+
+	$('#allotted').on('click','.add-member',function(){
+		var empId=$(this).attr('val');
+		var _this=$(this);
+		var loading=null;
+		$.ajax({
+			type:"POST",
+			dataType:"json",
+			url:"{:U('addTeamMember')}",
+			data:{
+				teamId:teamId,
+				empId:empId
+			},
+			beforeSend:function(){
+				loading=layer.load();
+			},
+			success:function(res){
+				layer.close(loading);
+				if(res.error==0){
+					str='<a href="javascript:;" class="btn btn-xs btn-danger" style="width:70px;margin:5px;" >'+_this.parent().text()+' <i val="'+empId+'" class="fa fa-plus pull-right remove-member" style="margin-top:3px"></i></a>';
+					_this.parent().remove();
+					$('#teamMember').find('span').remove();
+					$('#teamMember').append(str);
+				}else if(res.error==-1){
+					layer.msg('请不要重复添加');
+				}
+			}
+		});
+	});
+
+	$('#allotted').on('hidden.bs.modal', function () {
+	  $('#search').html('<span>请搜索</span>');
+	});
+});
+</script>
+
+</block>

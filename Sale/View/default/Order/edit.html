@@ -1,0 +1,120 @@
+<in name="Think.session.empId" value="9,23,327,265,326">
+<div class="form-group">
+    <label class="col-sm-2 control-label">来源</label>
+    <div class="col-sm-9">
+       <select class="selectpicker validate[required]" data-width="auto" data-size="5" data-style="btn-cy btn-sm" name="sourceId">
+            <volist name="sourceList" id="v">
+            <option value="{$v.id}" <eq name="v.id" value="$sourceId">selected="selected"</eq> >{$v.sourceName}</option>
+            </volist>
+        </select>
+    </div>
+</div>
+</in>
+
+<div class="form-group">
+    <label class="col-sm-2 control-label">讲师</label>
+    <div class="col-sm-9">
+       <select class="selectpicker" data-width="auto" data-size="5" data-style="btn-cy btn-sm" name="teacherId">
+            <option value="">请选择…</option>
+            <volist name="teacherList" id="v">
+            <option value="{$v.id}" <eq name="v.id" value="$teacherId">selected="selected"</eq> >{$v.teacherName}</option>
+            </volist>
+        </select>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-2 control-label">新增</label>
+    <div class="col-sm-9">
+       <select class="selectpicker validate[required]" disabled="disabled" data-width="auto" data-size="5" data-style="btn-cy btn-sm" name="isNew">
+            <option value="1" <eq name="isNew" value="1">selected="selected"</eq> >是</option>
+            <option value="2" <eq name="isNew" value="2">selected="selected"</eq> >否</option>
+            <!-- <option value="3" <eq name="isNew" value="3">selected="selected"</eq> >是-半单</option>
+            <option value="4" <eq name="isNew" value="4">selected="selected"</eq> >否-半单</option> -->
+            <option value="5" <eq name="isNew" value="5">selected="selected"</eq> >上拽</option>
+            <option value="6" <eq name="isNew" value="6">selected="selected"</eq> >续费</option>
+            <option value="7" <eq name="isNew" value="7">selected="selected"</eq> >其他</option>
+        </select>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-2 control-label">产品名称</label>
+    <div class="col-sm-9">
+       <select class="selectpicker validate[required]" data-width="auto" data-size="5" data-style="btn-cy btn-sm" name="firstProduct" id="firstProduct">
+        <volist name="firstProduct" id="v">
+            <option value="{$v.id}" <eq name="v.id" value="$firstProductId">selected="selected"</eq>  >{$v.productName}</option>
+        </volist>
+        </select>
+        <select class="selectpicker validate[required]" data-width="auto" data-size="5" data-style="btn-cy btn-sm" name="productId" id="productId">
+        </select>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-2 control-label">订单编号</label>
+    <div class="col-sm-9">
+        <input type="text" class="form-control validate[required]" name="orderNo" placeholder="订单编号" value="{$orderNo}" autocomplete="off">
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-2 control-label">金额</label>
+    <div class="col-sm-9">
+        <input type="text" class="form-control validate[required]" name="price" placeholder="订单金额" value="{$price}" autocomplete="off">
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-2 control-label">收款日期</label>
+    <div class="col-sm-9">
+        <input type="text" class="form-control datepicker validate[required]" name="collectDate" placeholder="收款日期" value="{$collectDate}" autocomplete="off">
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-2 control-label">订单状态</label>
+    <div class="col-sm-9">
+        <input type="text" class="form-control" name="status" placeholder="订单状态" value="{$status}" autocomplete="off">
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-2 control-label">订单备注</label>
+    <div class="col-sm-9">
+        <textarea class="form-control" name="beizhu" placeholder="订单备注">{$beizhu}</textarea>
+    </div>
+</div>
+<p class="help-block text-danger">用户信息不可修改，若错误，请联系销售助理</p>
+<input type="hidden" name="id" value="{$id}">
+<script type="text/javascript">
+    $('.selectpicker').selectpicker();
+    $('.datepicker').datetimepicker({
+        format: 'yyyy-mm-dd',
+        autoclose: true,
+        language: "zh-CN",
+        minView: 2,
+        pickerPosition: "bottom-left"
+    });
+    $('#firstProduct').change(function(){
+       
+        if($('#firstProduct').val() < 1 ) return false;
+        $.ajax({
+            type:"post",
+            dataType:"json",
+            data:{
+                'id':$('#firstProduct').val()
+            },
+            url:'{:U("Product/getChildren")}',
+            success:function(res){
+                if(res.error==0){
+                    var str='';
+                    $(res.products).each(function(k,v){
+                        str+= '<option value="'+v.id+'">'+v.productName+'</option>';
+                    });
+                    $('#productId').html('').append(str).val('{$productId}');
+                    $('.selectpicker').selectpicker('refresh');
+                }else{
+                    layer.msg('产品获取失败，请稍后再试', {
+                        icon: 2
+                    });
+                }
+            }
+        }); 
+    });
+
+    $('#firstProduct').trigger('change');
+</script>

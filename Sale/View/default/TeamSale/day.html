@@ -1,0 +1,230 @@
+<extend name="./App/Common/View/default/base.html"/>
+
+<block name="title">
+团队每日销售-报表统计-销售管理-
+</block>
+
+<block name="menu">
+    {:W('Common/Cat/menu',array('Sale/Statistics/index'))}
+</block>
+
+<block name="css">
+ <link href="RES{:C('DEFAULT_THEME')}/resources/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet">
+ <link href="RES{:C('DEFAULT_THEME')}/resources/jQuery-Validation-Engine/css/validationEngine.jquery.css" rel="stylesheet">
+ <link rel="stylesheet" href="RES{:C('DEFAULT_THEME')}/resources/datetimepicker/css/bootstrap-datetimepicker.min.css" />
+</block>
+
+<block name="breadcrumb">
+<div class="row _breadcrumb">
+    <div class="col-xs-12">
+        <ol class="breadcrumb">
+            团队每日销售
+        </ol>
+
+        <ul class="breadcrumb">
+            <li><i class="fa fa-home"></i>首页</li>
+            <li><a>报表统计</a></li>
+            <li class="active"><a>团队每日销售</a></li>
+        </ul>
+    </div>
+</div>
+</block>
+
+<block name="content">
+<div class="_contain">
+	<h2 class="_title-center">团队每日销售详情<span>
+	<?php
+        if ($auth->check('Sale/TeamSale/day', session('empId')) || session('empId') == C('CFG_MANAGER_ID')):
+	?>
+	<a href="{:U('TeamSale/day')}" class="active">日</a>
+	<?php endif; ?>
+	<?php
+        if ($auth->check('Sale/TeamSale/month', session('empId')) || session('empId') == C('CFG_MANAGER_ID')):
+	?>
+	<a href="{:U('TeamSale/month')}">月</a></span>
+	<?php endif; ?>
+	</h2>
+	<div class="_sell-div">
+	<table class="table _sell-sum">
+		<tr>
+			<td class="_jt">{$today}</td>
+			<td class="_tu" rowspan="3">
+				<div class="_today"></div>
+			</td>
+			<td class="_tu" rowspan="3">
+				<div class="_yesterday"></div>
+			</td>
+			<td class="_jt">{$yesterday}</td>
+		</tr>
+		<tr>
+			<td class="_dan">{$todayOrderNum|default="0"} 单</td>
+			<td class="_dan">{$yesterdayOrderNum|default="0.0"} 单</td>
+		</tr>
+		<tr>
+			<td class="_money">{$todayOrderPrice|default="0"}</td>
+			<td class="_money">{$yesterdayOrderPrice|default="0.0"}</td>
+		</tr>
+	</table>
+	</div>
+	<form action="__ACTION__" id="searchForm"> 
+		<div class="form-group _search">
+			<label class="sr-only" for="txtDate">搜索</label>
+			<div class="input-group">
+				<input type="text" class="form-control" name="collectDate" value="{$Think.get.collectDate}" id="txtDate" placeholder="点击选择日期">
+				<div id="search" class="input-group-addon"><img src="RES{:C('DEFAULT_THEME')}/img/icon/search.png" /></div>
+			</div>
+		</div>
+	</form>
+	<notempty name="teamDay">
+	<table class="table">
+		<tr>
+			<th>团队</th>
+			<th>出单数</th>
+			<th>金额（元）</th>	
+		</tr>
+		<volist name="teamDay" id="v">
+		<tr>
+			<td>{$v['order'][0]['teamName']}</td>
+			<td>{$v['orderNum']}</td>
+			<td>{$v['orderPrice']}</td>
+		</tr>
+		</volist>
+	</table>
+	</notempty>
+	<!--团队-->
+	<div class="row _waterfall">
+	<notempty name="dayList">
+		<volist name="dayList" id="v">
+		<div class="col-xs-12 col-lg-3">
+			<div class="_waterfall-item">
+				<table class="table _table-leader">
+					<tr>
+						<td rowspan="4" class="_avatar"><img src="{$v['order'][0]['pic']}" /></td>
+						<td colspan="2">
+							<h4>{$v['order'][0]['teamName']}</h4></td>
+					</tr>
+					<tr>
+						<td>主 管：{$v['order'][0]['teamLeader']}</td>
+						<td>经 理：{$v['order'][0]['teamManager']}</td>
+					</tr>
+					<tr>
+						<td>出单人数：{$v['orderEmp']} </td>
+						<td>出单数：{$v['orderNum']} </td>
+					</tr>
+					<tr>
+						<td colspan="2">总销售额：<strong>{$v['orderPrice']}</strong></td>
+					</tr>
+				</table>
+				<table class="table _table-emp">
+					<thead>
+						<tr>
+							<td>员工</td>
+							<td>金额</td>
+							<td>订单数</td>
+						</tr>
+					</thead>
+					<tbody>
+						<volist name="v.order" id="order">
+						<tr>
+							<td class="_avatar"><img src="{$order.headPic}" />{$order.empName}</td>
+							<td>{$order.orderPrice}</td>
+							<td><span class="detail" val="{$order.empId}">{$order.orderNum}</span></td>
+						</tr>
+						</volist>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		</volist>
+	<else/>
+	<div class="col-xs-12 col-lg-3">
+	今天暂未出单！
+	</div>
+	</notempty>
+	</div>
+	
+	<!--没有更多了-->
+	<div class="_nomore">
+		没有更多了
+	</div>
+</div>
+</block>
+
+<block name="modal">
+<!--订单详情  开始-->
+<div class="modal fade _modal _ordermodal" id="OrderModal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><img src="RES{:C('DEFAULT_THEME')}/img/icon/modal_colse.png" /></span></button>
+				<h4 class="modal-title">订单详情</h4>
+			</div>
+			<div class="modal-body">
+				<table class="table">
+					<thead>
+						<tr>
+							<td>序号</td>
+							<td>产品名称</td>
+							<td>价格</td>
+							<td>是否新增</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>1</td>
+							<td>决策加强版</td>
+							<td>2980.0</td>
+							<td>是</td>
+						</tr>
+						<tr>
+							<td>3</td>
+							<td>决策加强版</td>
+							<td>2980.0</td>
+							<td><span>否</span></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<!--订单详情  结束-->
+</block>
+
+<block name="scripts">
+<script type="text/javascript" src="RES{:C('DEFAULT_THEME')}/resources/jQuery-Masonry/masonry.pkgd.min.js"></script>
+
+<script type="text/javascript" src="RES{:C('DEFAULT_THEME')}/resources/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="RES{:C('DEFAULT_THEME')}/resources/datetimepicker/js/bootstrap-datetimepicker.zh-CN.js"></script>
+
+<script>
+	 //瀑布流效果
+	var container = document.querySelector('._waterfall');
+	var msnry = new Masonry(container, {
+		gutter: 0,
+		itemSelector: '.col-lg-3',
+		isAnimated: true,
+	});
+
+	$('._today').height({$todayOrderNum});
+	$('._yesterday').height({$yesterdayOrderNum});
+
+	$('#search').click(function(){
+		$('#searchForm').submit();
+	});
+
+	function openOrderModal(id) {
+		$("#OrderModal").modal("show");
+	}
+	$(document).ready(function() {
+		//加载日历
+		$('#txtDate').datetimepicker({
+			format: 'yyyy-mm-dd',
+			autoclose: true,
+			language: "zh-CN",
+			minView: 2,
+			pickerPosition: "bottom-left"
+		});
+	});
+</script>
+</block>
